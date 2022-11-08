@@ -24,8 +24,12 @@
 
 #ifdef NATIVE_BUILD
 #include <stdarg.h>
+#define GET_ERRNO_STR(errnoValue) strerror(errnoValue)
+// Value from IRIX's libc
+#define sys_nerr 0x00000098
 #else
 #include "indy/varargs.h"
+#define GET_ERRNO_STR(errnoValue) sys_errlist[errnoValue]
 #endif
 
 // indy specific headers
@@ -8310,7 +8314,7 @@ void error(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, argA, arg
             fprintf(stderr, "%s: Error: error (), %d: Out of memory\n", D_1000C1D8, 13332);
 
             if (errno < sys_nerr) {
-                fprintf(stderr, "%s: %s\n", D_1000C1D8, sys_errlist[errno]);
+                fprintf(stderr, "%s: %s\n", D_1000C1D8, GET_ERRNO_STR(errno));
             }
             exit(1);
         }
@@ -9227,7 +9231,7 @@ va_dcl // K&R syntax
     if (ret == NULL) {
         error(1, NULL, 0, "mkstr ()", 0x38BC, "out of memory\n");
         if (errno < sys_nerr) {
-            error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+            error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
         }
         exit(1);
     }
@@ -9254,7 +9258,7 @@ void mklist(list* arg0) {
     if ((arg0->entries = malloc(LIST_INITIAL_CAPACITY * sizeof(char*))) == NULL) {
         error(1, NULL, 0, "mklist ()", 14561, "out of memory\n");
         if (errno < sys_nerr) {
-            error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+            error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
         }
         exit(1);
     }
@@ -9274,7 +9278,7 @@ void addstr (arg0, str)
         if ((arg0->entries = realloc(arg0->entries, (arg0->capacity + LIST_CAPACITY_INCR) * sizeof(char*))) == 0) {
             error(1, NULL, 0, "addstr()", 14595, "out of memory\n");
             if (errno < sys_nerr) {
-                error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
             }
             exit(1);
         }
@@ -9301,7 +9305,7 @@ void addspacedstr(list* arg0, char* str) {
                 NULL) {
                 error(1, NULL, 0, "addspacedstr()", 14639, "out of memory\n");
                 if (errno < sys_nerr) {
-                    error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                    error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
                 }
                 exit(1);
             }
@@ -9341,7 +9345,7 @@ int save_place(list* arg0) {
             error(1, NULL, 0, "save_place()", 14695, "out of memory\n");
 
             if (errno < sys_nerr) {
-                error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
             }
             exit(1);
         }
@@ -9379,7 +9383,7 @@ void addlist(list* arg0, list* arg1) {
                                      (arg0->capacity + arg1->capacity + LIST_CAPACITY_INCR) * sizeof(char*))) == NULL) {
             error(1, NULL, 0, "addlist ()", 14756, "out of memory\n");
             if (errno < sys_nerr) {
-                error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
             }
             exit(1);
         }
@@ -9410,7 +9414,7 @@ void adduldlist(list* arg0, list* arg1, list* arg2) {
                                             sizeof(char*))) == NULL) {
             error(1, NULL, 0, "addlist ()", 14795, "out of memory\n");
             if (errno < sys_nerr) {
-                error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
             }
             exit(1);
         }
@@ -9592,7 +9596,7 @@ char* savestr(const char* src, size_t extra_length) {
     if (dest == NULL) {
         error(1, NULL, 0, "savestr ()", 15014, "out of memory\n");
         if (errno < sys_nerr) {
-            error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+            error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
         }
         exit(1);
     }
@@ -9695,7 +9699,7 @@ int run(char* arg0, char* const arg1[], char* arg2, char* arg3, char* arg4) {
     if (spA0 == -1) { // fork failed
         error(1, NULL, 0, NULL, 0, "no more processes\n");
         if (errno < sys_nerr) {
-            error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+            error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
         }
         return -1;
     }
@@ -9710,7 +9714,7 @@ int run(char* arg0, char* const arg1[], char* arg2, char* arg3, char* arg4) {
             if (sp94 == -1) {
                 error(1, NULL, 0, NULL, 0, "can't open input file: %s\n", arg2);
                 if (errno < sys_nerr) {
-                    error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                    error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
                 }
                 cleanup();
                 exit(1);
@@ -9723,7 +9727,7 @@ int run(char* arg0, char* const arg1[], char* arg2, char* arg3, char* arg4) {
             if (sp90 == -1) {
                 error(1, NULL, 0, NULL, 0, "can't create output file: %s\n", arg3);
                 if (errno < sys_nerr) {
-                    error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                    error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
                 }
                 cleanup();
                 exit(1);
@@ -9736,7 +9740,7 @@ int run(char* arg0, char* const arg1[], char* arg2, char* arg3, char* arg4) {
             if (sp8C == -1) {
                 error(1, NULL, 0, NULL, 0, "can't create error file: %s\n", arg4);
                 if (errno < sys_nerr) {
-                    error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                    error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
                 }
                 cleanup();
                 exit(1);
@@ -9755,7 +9759,7 @@ int run(char* arg0, char* const arg1[], char* arg2, char* arg3, char* arg4) {
             } else {
                 error(1, NULL, 0, NULL, 0, "can't find or exec: %s\n", arg0);
                 if (errno < sys_nerr) {
-                    error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+                    error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
                 }
             }
         }
@@ -9860,7 +9864,7 @@ int edit_src(const char* arg0, char* arg1, int arg2) {
     if (forkPid == (pid_t)-1) { // fork failed
         error(1, NULL, 0, NULL, 0, "fork to edit failed\n");
         if (errno < sys_nerr) {
-            error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+            error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
         }
         return -1;
     }
@@ -9877,7 +9881,7 @@ int edit_src(const char* arg0, char* arg1, int arg2) {
         }
         error(1, NULL, 0, NULL, 0, "failed to exec: %s\n", arg0);
         if (errno < sys_nerr) {
-            error(5, NULL, 0, NULL, 0, "%s\n", sys_errlist[errno]);
+            error(5, NULL, 0, NULL, 0, "%s\n", GET_ERRNO_STR(errno));
         }
 
         exit(1);
