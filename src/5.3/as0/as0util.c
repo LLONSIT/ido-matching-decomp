@@ -79,7 +79,7 @@ static void func_0040FB2C(void);
 void consume(void);
 static int func_0040FC20(int radix);
 static void func_0040FD98(void);
-void func_004100C8(void);
+static void func_004100C8(void);
 static void func_004101AC(void);
 static void func_00410270(char* arg0);
 int dot_soon(int arg0);
@@ -373,7 +373,7 @@ static void func_0040FD98(void) {
     }
 }
 
-void func_004100C8(void) {
+static void func_004100C8(void) {
 
     Tokench = 'd';
      while ((nextinline < linelength) && (line[nextinline] >= '0') && (line[nextinline] < '9')) {
@@ -1232,7 +1232,7 @@ int GetExpr(void) {
 }
 
 int dw_GetExpr(unsigned int* high, unsigned int* low) {
-    long long val64;
+    unsigned long long val64;
 
     if ((Tokench == 'i')
         || (Tokench == 'd')

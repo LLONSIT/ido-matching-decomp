@@ -2,7 +2,11 @@
 #include "stdlib.h"
 #include "string.h"
 #include "ctype.h"
-#include "unistd.h"
-#include "asm.h"
+#include "sym.h"
+#include "stsupport.h"
+#include "filehdr.h"
+#include "ldfcn.h"
+#include "cmplrs/stext.h"
 #include "binasm_rec.h"
-#include "cmplrs/binasm.h" //Original binsasm file
+#include "asm.h"
+
