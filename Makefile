@@ -6,7 +6,7 @@
 #### Defaults ####
 
 # select the version and binaries of IDO toolchain to disassemble and build
-VERSION ?= 7.1
+VERSION ?= 5.3
 # if WERROR is 1, pass -Werror to CC_CHECK, so warnings would be treated as errors
 WERROR ?= 0
 CC_CHECK_COMP ?= gcc
@@ -15,7 +15,7 @@ ifeq ($(VERSION),7.1)
 #	IDO_TC      := cc acpp as0 as1 cfe ugen ujoin uld umerge uopt usplit
 	IDO_TC      := cc cfe libc.so.1
 else ifeq ($(VERSION),5.3)
-	IDO_TC      := cc strip ld
+	IDO_TC      := cc strip ld as0
 # 	IDO_TC      := cc acpp as0 as1 cfe copt ugen ujoin uld umerge uopt usplit
 else
 $(error Unknown or unsupported IDO version - $(VERSION))
@@ -50,7 +50,7 @@ ASM_PROCESSOR := python3 tools/asm-processor/build.py
 IINC       := -Iinclude -Iinclude/indy -Isrc
 
 # Check code syntax with host compiler
-CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-char-subscripts -Wno-unused-label -Wno-parentheses -Wno-unused-parameter
+CHECK_WARNINGS := -Wall -Wextra -Wno-unknown-pragmas -Wno-unused-variable -Wno-char-subscripts -Wno-unused-label -Wno-parentheses -Wno-unused-parameter -Wno-switch
 # Have CC_CHECK pretend to be a MIPS compiler
 MIPS_BUILTIN_DEFS := -D_MIPS_FPSET=16 -D_MIPS_ISA=2 -D_ABIO32=1 -D_MIPS_SIM=_ABIO32 -D_MIPS_SZINT=32 -D_MIPS_SZLONG=32 -D_MIPS_SZPTR=32
 MIPS_BUILTIN_DEFS += -D__EXTENSIONS__ -DLANGUAGE_C -D_LANGUAGE_C -D__INLINE_INTRINSICS
@@ -70,7 +70,7 @@ LDFLAGS := -nostdlib -L$(RECOMP)/ido/$(VERSION)/usr/lib/ -lc
 
 
 ASMPROCFLAGS := 
-OPTFLAGS := -O1
+OPTFLAGS := -O2
 MIPS_VERSION := -mips2
 ASFLAGS := -march=vr4300 -32 -Iinclude -KPIC
 
