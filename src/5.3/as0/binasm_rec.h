@@ -3,8 +3,8 @@
 
 typedef struct {
     union {
-        unsigned unk0; //always symno
-        char arr0[4]; //data
+        unsigned unk0; // always symno
+        char arr0[4];  // data
     };
     union {
         unsigned unk4;
@@ -19,7 +19,7 @@ typedef struct {
         };
         struct {
             unsigned unk4_FFFF_ : 16;
-            unsigned unk6_FE: 7;
+            unsigned unk6_FE : 7;
             unsigned unk6_01FC : 7;
             unsigned unk7_03_ : 2;
         };
@@ -46,7 +46,6 @@ typedef struct {
             unsigned unkC_0003 : 2;
         };
     };
-}binasm_r;
-
+} binasm_r;
 
 #endif /* BINASM_H */

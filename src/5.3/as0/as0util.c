@@ -18,8 +18,8 @@
 
 #define BUF_COUNT 0x400
 
-#define MAX(a, b) ((a > b) ? a: b)
-#define MIN(a, b) ((a > b) ? b: a)
+#define MAX(a, b) ((a > b) ? a : b)
+#define MIN(a, b) ((a > b) ? b : a)
 
 //.data
 char* sitype[0x3F] = {
@@ -32,502 +32,479 @@ char* sitype[0x3F] = {
     ".gjaldef", ".gjallive", ".gjrlive", ".ishift_addr", ".irestext", ".dword",  ".prologue",  ".edata",  ".alloc",
 };
 
-char *sregisters[0x49] = {
-    "$0",    "$1",    "$2",    "$3",    "$4",    "$5",    "$6",    "$7",
-    "$8",    "$9",    "$10",   "$11",   "$12",   "$13",   "$14",   "$15",
-    "$16",   "$17",   "$18",   "$19",   "$20",   "$21",   "$22",   "$23",
-    "$24",   "$25",   "$26",   "$27",   "$28",   "$29",   "$30",   "$31",
-    "$f0",   "$f1",   "$f2",   "$f3",   "$f4",   "$f5",   "$f6",   "$f7",
-    "$f8",   "$f9",   "$f10",  "$f11",  "$f12",  "$f13",  "$f14",  "$f15",
-    "$f16",  "$f17",  "$f18",  "$f19",  "$f20",  "$f21",  "$f22",  "$f23",
-    "$f24",  "$f25",  "$f26",  "$f27",  "$f28",  "$f29",  "$f30",  "$f31",
-    "$fcc0", "$fcc1", "$fcc2", "$fcc3", "$fcc4", "$fcc5", "$fcc6", "$fcc7",
-    "   ",
+char* sregisters[0x49] = {
+    "$0",    "$1",    "$2",    "$3",    "$4",    "$5",    "$6",    "$7",   "$8",   "$9",   "$10",  "$11",  "$12",
+    "$13",   "$14",   "$15",   "$16",   "$17",   "$18",   "$19",   "$20",  "$21",  "$22",  "$23",  "$24",  "$25",
+    "$26",   "$27",   "$28",   "$29",   "$30",   "$31",   "$f0",   "$f1",  "$f2",  "$f3",  "$f4",  "$f5",  "$f6",
+    "$f7",   "$f8",   "$f9",   "$f10",  "$f11",  "$f12",  "$f13",  "$f14", "$f15", "$f16", "$f17", "$f18", "$f19",
+    "$f20",  "$f21",  "$f22",  "$f23",  "$f24",  "$f25",  "$f26",  "$f27", "$f28", "$f29", "$f30", "$f31", "$fcc0",
+    "$fcc1", "$fcc2", "$fcc3", "$fcc4", "$fcc5", "$fcc6", "$fcc7", "   ",
 };
 
-//Seems to be unused in 5.3 and 7.1
+// Seems to be unused in 5.3 and 7.1
 char* sopt_type[3] = {
     "none",
     "optimize",
     "pic",
 };
 
-char *sset_value[0x11] = {
-    "",
-    "reorder",
-    "noreorder",
-    "macro",
-    "nomacro",
-    "at",
-    "noat",
-    "move",
-    "nomove",
-    "bopt",
-    "nobopt",
-    "volatile",
-    "novolatile",
-    "transform",
-    "notransform",
-    "reposition",
-    "noreposition",
+char* sset_value[0x11] = {
+    "",     "reorder", "noreorder", "macro",      "nomacro",   "at",          "noat",       "move",         "nomove",
+    "bopt", "nobopt",  "volatile",  "novolatile", "transform", "notransform", "reposition", "noreposition",
 };
-//UNUSED
+// UNUSED
 char* sformat_extn[7] = {
-    "franone",
-    "frahi",
-    "fralo",
-    "frarel1",
-    "frarel2",
-    "", //0x000000
-    "", //0x000000
+    "franone", "frahi", "fralo", "frarel1", "frarel2",
+    "", // 0x000000
+    "", // 0x000000
 };
 
-char* sframereg = "$framereg"; //Extern, but declared here
-char* sframesize = "$framesize";//Extern, but declared here
+char* sframereg = "$framereg";   // Extern, but declared here
+char* sframesize = "$framesize"; // Extern, but declared here
 
 extern int gform_extn;
 struct _struct_asm_info_0x8 asm_info[0x1AF] = {
-    {"abs", 0x08000420},
-    {"add", 0x060A0421},
-    {"addu", 0x060A8421},
-    {"and", 0x060C0421},
-    { "b",  (unsigned) &gform_extn},
-    {"bc0f", 0x101C8000},
-    {"bc0t", 0x101D0000},
-    {"bc1f", 0x101DB000},
-    {"bc1t", 0x101E3000},
-    {"bc2f", 0x101E8000},
-    {"bc2t", 0x101F0000},
-    {"", 0},
-    {"", 0},
-    {"beq", 0x0C258420},
-    {"bge", 0x0C000420},
-    {"bgeu", 0x0C000420},
-    {"bgez", 0x0E1B0400},
-    {"bgt", 0x0C000420},
-    {"bgtu", 0x0C000420},
-    {"bgtz", 0x0E270400},
-    {"ble", 0x0C000420},
-    {"bleu", 0x0C000420},
-    {"blez", 0x0E268400},
-    {"blt", 0x0C000420},
-    {"bltu", 0x0C000420},
-    {"bltz", 0x0E1A8400},
-    {"bne", 0x0C260420},
-    {"break", 0x58000},
-    {"c0", 0x12318000},
-    {"c1", 0x12320000},
-    {"c2", 0x12328000},
-    {"", 0},
-    {"div", 0x06090421},
-    {"divu", 0x06098421},
-    {"j", 0x0A248400},
-    {"jal", 0x0A250400},
-    {"la", 0x02000400},
-    {"lb", 0x02330460},
-    {"lbu", 0x02350460},
-    {"lh", 0x02338460},
-    {"lhu", 0x02358460},
-    {"li", 0x04000400},
-    {"lw", 0x02348460},
-    {"jr", 0x0A040400},
-    {"lwc1", 0x02399060},
-    {"lwc2", 0x023A0460},
-    {"pref", 0x1E9E0460},
-    {"mfhi", 0x14060400},
-    {"mflo", 0x14070400},
-    {"move", 0x08000420},
-    {"jalr", 0x0A048400},
-    {"swc1", 0x023B1060},
-    {"swc2", 0x023B8460},
-    {"", 0},
-    {"mthi", 0x14068400},
-    {"mtlo", 0x14078400},
-    {"mul", 0x06000421},
-    {"mulo", 0x06000421},
-    {"mulou", 0x06000421},
-    {"mult", 0x08080420},
-    {"multu", 0x08088420},
-    {"neg", 0x08000420},
-    {"nop", 0x8000},
-    {"nor", 0x060D8421},
-    {"or", 0x060C8421},
-    {"rem", 0x06090421},
-    {"remu", 0x06098421},
-    {"rfe", 0x498000},
-    {"rol", 0x06000421},
-    {"ror", 0x06000421},
-    {"sb", 0x02368460},
-    {"seq", 0x06000421},
-    {"sge", 0x06000421},
-    {"sgeu", 0x06000421},
-    {"sgt", 0x06000421},
-    {"sgtu", 0x06000421},
-    {"sh", 0x02370460},
-    {"sle", 0x06000421},
-    {"sleu", 0x06000421},
-    {"sll", 0x06010421},
-    {"slt", 0x06000421},
-    {"sltu", 0x06000421},
-    {"sne", 0x06000421},
-    {"sra", 0x06020421},
-    {"srl", 0x06018421},
-    {"sub", 0x060B0421},
-    {"subu", 0x060B8421},
-    {"sw", 0x02380460},
-    {"syscall", 0x50000},
-    {"xor", 0x060D0421},
-    {"not", 0x08000420},
-    {"lwl", 0x02340460},
-    {"lwr", 0x02360460},
-    {"swl", 0x02378460},
-    {"swr", 0x02388460},
-    {"", 0},
-    {"mfc0", 0x084584E0},
-    {"mfc1", 0x08460480},
-    {"mfc2", 0x084684E0},
-    {"", 0},
-    {"mtc0", 0x084784E0},
-    {"mtc1", 0x08480480},
-    {"mtc2", 0x084884E0},
-    {"sync", 0x4C0000},
-    {"tlbr", 0x4A0000},
-    {"tlbwi", 0x4A8000},
-    {"tlbwr", 0x4B0000},
-    {"tlbp", 0x4B8000},
-    {"ld", 0x023C8860},
-    {"sd", 0x023D0860},
-    {"", 0},
-    {"ldc1", 0x023D9460},
-    {"ldc2", 0x023E2060},
-    {"tlbr1", 0x9E8000},
-    {"tlbp1", 0x9F0000},
-    {"sdc1", 0x023E9460},
-    {"sdc2", 0x023F2060},
-    {"", 0},
-    {"l.s", 0x02001460},
-    {"l.d", 0x02001460},
-    {"l.e", 0x02001860},
-    {"s.s", 0x02001460},
-    {"s.d", 0x02001460},
-    {"s.e", 0x02001860},
-    {"add.s", 0x065014A5},
-    {"add.d", 0x065094A5},
-    {"add.e", 0x065118C6},
-    {"sub.s", 0x065194A5},
-    {"sub.d", 0x065214A5},
-    {"sub.e", 0x065298C6},
-    {"mul.s", 0x065314A5},
-    {"mul.d", 0x065394A5},
-    {"mul.e", 0x065418C6},
-    {"div.s", 0x065494A5},
-    {"div.d", 0x065514A5},
-    {"div.e", 0x065598C6},
-    {"sqrt.s", 0x080014A0},
-    {"sqrt.d", 0x080014A0},
-    {"sqrt.e", 0x080018C0},
-    {"mov.s", 0x080014A0},
-    {"mov.d", 0x080014A0},
-    {"mov.e", 0x080018C0},
-    {"abs.s", 0x080014A0},
-    {"abs.d", 0x080014A0},
-    {"abs.e", 0x080018C0},
-    {"cvt.s.d", 0x080014A0},
-    {"cvt.s.e", 0x080014C0},
-    {"cvt.s.w", 0x080014A0},
-    {"cvt.d.s", 0x080014A0},
-    {"cvt.d.e", 0x080014C0},
-    {"cvt.d.w", 0x080014A0},
-    {"cvt.e.s", 0x080018A0},
-    {"cvt.e.d", 0x080018A0},
-    {"cvt.e.w", 0x080018A0},
-    {"cvt.w.s", 0x080014A0},
-    {"cvt.w.d", 0x080014A0},
-    {"cvt.w.e", 0x080014C0},
-    {"c.f.s", 0x080030A5},
-    {"c.f.d", 0x080030A5},
-    {"c.f.e", 0x080030C6},
-    {"c.un.s", 0x080030A5},
-    {"c.un.d", 0x080030A5},
-    {"c.un.e", 0x080030C6},
-    {"c.eq.s", 0x080030A5},
-    {"c.eq.d", 0x080030A5},
-    {"c.eq.e", 0x080030C6},
-    {"c.ueq.s", 0x080030A5},
-    {"c.ueq.d", 0x080030A5},
-    {"c.ueq.e", 0x080030C6},
-    {"c.olt.s", 0x080030A5},
-    {"c.olt.d", 0x080030A5},
-    {"c.olt.e", 0x080030C6},
-    {"c.ult.s", 0x080030A5},
-    {"c.ult.d", 0x080030A5},
-    {"c.ult.e", 0x080030C6},
-    {"c.ole.s", 0x080030A5},
-    {"c.ole.d", 0x080030A5},
-    {"c.ole.e", 0x080030C6},
-    {"c.ule.s", 0x080030A5},
-    {"c.ule.d", 0x080030A5},
-    {"c.ule.e", 0x080030C6},
-    {"c.sf.s", 0x080030A5},
-    {"c.sf.d", 0x080030A5},
-    {"c.sf.e", 0x080030C6},
-    {"c.ngle.s", 0x080030A5},
-    {"c.ngle.d", 0x080030A5},
-    {"c.ngle.e", 0x080030C6},
-    {"c.seq.s", 0x080030A5},
-    {"c.seq.d", 0x080030A5},
-    {"c.seq.e", 0x080030C6},
-    {"c.ngl.s", 0x080030A5},
-    {"c.ngl.d", 0x080030A5},
-    {"c.ngl.e", 0x080030C6},
-    {"c.lt.s", 0x080030A5},
-    {"c.lt.d", 0x080030A5},
-    {"c.lt.e", 0x080030C6},
-    {"c.nge.s", 0x080030A5},
-    {"c.nge.d", 0x080030A5},
-    {"c.nge.e", 0x080030C6},
-    {"c.le.s", 0x080030A5},
-    {"c.le.d", 0x080030A5},
-    {"c.le.e", 0x080030C6},
-    {"c.ngt.s", 0x080030A5},
-    {"c.ngt.d", 0x080030A5},
-    {"c.ngt.e", 0x080030C6},
-    {"lui", 0x042D0400},
-    {"ulw", 0x02000460},
-    {"ulh", 0x02000460},
-    {"ulhu", 0x02000460},
-    {"usw", 0x02000460},
-    {"ush", 0x02000460},
-    {"addi", 0x06298420},
-    {"addiu", 0x062A0420},
-    {"slti", 0x062A8420},
-    {"sltiu", 0x062B0420},
-    {"andi", 0x062B8420},
-    {"ori", 0x062C0420},
-    {"xori", 0x062C8420},
-    {"", 0},
-    {"negu", 0x08000420},
-    {"beqz", 0x0E258400},
-    {"bnez", 0x0E260400},
-    {"neg.s", 0x080014A0},
-    {"neg.d", 0x080014A0},
-    {"neg.e", 0x080018C0},
-    {"cfc1", 0x084704E0},
-    {"ctc1", 0x084904E0},
-    {"bal", 0x0E1C0000},
-    {"bgezal", 0x0E1C0400},
-    {"bltzal", 0x0E1B8400},
-    {"mtc1.d", 0x084808A0},
-    {"mfc1.d", 0x084608A0},
-    {"trunc.w.s", 0x060014A1},
-    {"trunc.w.d", 0x060014A1},
-    {"trunc.w.e", 0x060018C1},
-    {"round.w.s", 0x060014A1},
-    {"round.w.d", 0x060014A1},
-    {"round.w.e", 0x060018C1},
-    {"addou", 0x060A8421},
-    {"subou", 0x060B8421},
-    {"truncu.w.s", 0x060014A1},
-    {"truncu.w.d", 0x060014A1},
-    {"truncu.w.e", 0x060018C1},
-    {"roundu.w.s", 0x060014A1},
-    {"roundu.w.d", 0x060014A1},
-    {"roundu.w.e", 0x060018C1},
-    {"cfc0", 0x087A04E0},
-    {"cfc2", 0x087A84E0},
-    {"", 0},
-    {"ctc0", 0x087B04E0},
-    {"ctc2", 0x087B84E0},
-    {"", 0},
-    {"li.s", 0x167C2400},
-    {"li.d", 0x167CA800},
-    {"li.e", 0x167D2C00},
-    {"tlt", 0x1A0F0420},
-    {"tltu", 0x1A0F8420},
-    {"tge", 0x1A100420},
-    {"tgeu", 0x1A108420},
-    {"teq", 0x1A110420},
-    {"tne", 0x1A118420},
-    {"ll", 0x02390460},
-    {"sc", 0x023A8460},
-    {"ceil.w.s", 0x060014A1},
-    {"ceil.w.d", 0x060014A1},
-    {"ceil.w.e", 0x060018C1},
-    {"ceilu.w.s", 0x060014A1},
-    {"ceilu.w.d", 0x060014A1},
-    {"ceilu.w.e", 0x060018C1},
-    {"floor.w.s", 0x060014A1},
-    {"floor.w.d", 0x060014A1},
-    {"floor.w.e", 0x060018C1},
-    {"flooru.w.s", 0x060014A1},
-    {"flooru.w.d", 0x060014A1},
-    {"flooru.w.e", 0x060018C1},
-    {"beql", 0x0C278420},
-    {"beqzl", 0x0E278400},
-    {"bnel", 0x0C280420},
-    {"bnezl", 0x0E280400},
-    {"blel", 0x0C000420},
-    {"bleul", 0x0C000420},
-    {"blezl", 0x0E288400},
-    {"bgtl", 0x0C000420},
-    {"bgtul", 0x0C000420},
-    {"bgtzl", 0x0E290400},
-    {"bltl", 0x0C000420},
-    {"bltul", 0x0C000420},
-    {"bltzl", 0x0E1F8400},
-    {"bltzall", 0x0E208400},
-    {"bgel", 0x0C000420},
-    {"bgeul", 0x0C000420},
-    {"bgezl", 0x0E200400},
-    {"bgezall", 0x0E210400},
-    {"bc0fl", 0x10218000},
-    {"bc0tl", 0x10220000},
-    {"bc1fl", 0x1022B000},
-    {"bc1tl", 0x10233000},
-    {"bc2fl", 0x10238000},
-    {"bc2tl", 0x10240000},
-    {"", 0},
-    {"", 0},
-    {"ldl", 0x023F8460},
-    {"ldr", 0x02400460},
-    {"lld", 0x02408460},
-    {"lwu", 0x023C0460},
-    {"sdl", 0x02410460},
-    {"sdr", 0x02418460},
-    {"scd", 0x02420460},
-    {"daddi", 0x06308420},
-    {"daddiu", 0x06310420},
-    {"dadd", 0x06120421},
-    {"daddu", 0x06128421},
-    {"dsub", 0x06130421},
-    {"dsubu", 0x06138421},
-    {"dsll", 0x06140421},
-    {"dsrl", 0x06148421},
-    {"dsra", 0x06150421},
-    {"dsllv", 0x06170421},
-    {"dsrlv", 0x06178421},
-    {"dsrav", 0x06180421},
-    {"dmult", 0x08188420},
-    {"dmultu", 0x08190420},
-    {"ddiv", 0x06000421},
-    {"ddivu", 0x06000421},
-    {"", 0},
-    {"", 0},
-    {"dmtc1", 0x084C8480},
-    {"dmfc1", 0x084D0480},
-    {"dmtc0", 0x084D84E0},
-    {"dmfc0", 0x084E04E0},
-    {"dmtc2", 0x084E84E0},
-    {"dmfc2", 0x084F04E0},
-    {"dli", 0x1C000400},
-    {"dla", 0x02000400},
-    {"eret", 0x8D8000},
-    {"trunc.l.s", 0x06001081},
-    {"round.l.s", 0x06001081},
-    {"ceil.l.s", 0x06001081},
-    {"floor.l.s", 0x06001081},
-    {"trunc.l.d", 0x06001081},
-    {"round.l.d", 0x06001081},
-    {"ceil.l.d", 0x06001081},
-    {"floor.l.d", 0x06001081},
-    {"trunc.l.e", 0x060010A1},
-    {"round.l.e", 0x060010A1},
-    {"ceil.l.e", 0x060010A1},
-    {"floor.l.e", 0x060010A1},
-    {"cvt.l.s", 0x08001080},
-    {"cvt.l.d", 0x08001080},
-    {"cvt.l.e", 0x080010A0},
-    {"cvt.l.w", 0x08001080},
-    {"cvt.s.l", 0x08001080},
-    {"cvt.d.l", 0x08001080},
-    {"cvt.e.l", 0x08001480},
-    {"cvt.w.l", 0x08001080},
-    {"cache", 0x1E4F8460},
-    {"cia", 0x04000000},
-    {"uld", 0x02000460},
-    {"usd", 0x02000460},
-    {"dabs", 0x08000420},
-    {"dneg", 0x08000420},
-    {"dnegu", 0x08000420},
-    {"dmul", 0x06000421},
-    {"dmulo", 0x06000421},
-    {"dmulou", 0x06000421},
-    {"drem", 0x06000421},
-    {"dremu", 0x06000421},
-    {"drol", 0x06000421},
-    {"dror", 0x06000421},
-    {"daddou", 0x06128421},
-    {"dsubou", 0x06138421},
-    {"ulwu", 0x02000460},
-    {"movt", 0x0600042C},
-    {"movf", 0x0600042C},
-    {"movn", 0x06000421},
-    {"movz", 0x06000421},
-    {"madd.s", 0x20001084},
-    {"madd.d", 0x20001084},
-    {"madd.e", 0x200018C6},
-    {"msub.s", 0x20001084},
-    {"msub.d", 0x20001084},
-    {"msub.e", 0x200018C6},
-    {"nmadd.s", 0x20001084},
-    {"nmadd.d", 0x20001084},
-    {"nmadd.e", 0x200018C6},
-    {"nmsub.s", 0x20001084},
-    {"nmsub.d", 0x20001084},
-    {"nmsub.e", 0x200018C6},
-    {"recip.s", 0x08001080},
-    {"recip.d", 0x08001080},
-    {"rsqrt.s", 0x08001080},
-    {"rsqrt.d", 0x08001080},
-    {"movt.s", 0x0600108C},
-    {"movt.d", 0x0600108C},
-    {"movf.s", 0x0600108C},
-    {"movf.d", 0x0600108C},
-    {"movn.s", 0x06001081},
-    {"movn.d", 0x06001081},
-    {"movz.s", 0x06001081},
-    {"movz.d", 0x06001081},
-    {"lwxc1", 0x22001021},
-    {"ldxc1", 0x22001021},
-    {"swxc1", 0x22001021},
-    {"sdxc1", 0x22001021},
-    {"prefx", 0x22000421},
-    {"dctr", 0},
-    {"dctw", 0},
-    {"tlbw", 0},
-    {"nada", 0},
-    {"ssnop", 0},
-    {"dsll32", 0x06140421},
-    {"dsrl32", 0x06148421},
-    {"dsra32", 0x06150421},
-    {"bc3f", 0x109F8000},
-    {"bc3t", 0x10A00000},
-    {"c3", 0x12A08000},
-    {"lwc3", 0x02A10460},
-    {"swc3", 0x02A18460},
-    {"mfc3", 0x08A204E0},
-    {"mtc3", 0x08A284E0},
-    {"cfc3", 0x08A304E0},
-    {"ctc3", 0x08A384E0},
-    {"sllv", 0x06028421},
-    {"srlv", 0x06030421},
-    {"srav", 0x06038421},
-    {"mfpc", 0x08A404E0},
-    {"mtpc", 0x08A404E0},
-    {"mfps", 0x08A404E0},
-    {"mtps", 0x08A404E0},
-    {"", 0},
-    {NULL, 0},
+    { "abs", 0x08000420 },
+    { "add", 0x060A0421 },
+    { "addu", 0x060A8421 },
+    { "and", 0x060C0421 },
+    { "b", (unsigned)&gform_extn },
+    { "bc0f", 0x101C8000 },
+    { "bc0t", 0x101D0000 },
+    { "bc1f", 0x101DB000 },
+    { "bc1t", 0x101E3000 },
+    { "bc2f", 0x101E8000 },
+    { "bc2t", 0x101F0000 },
+    { "", 0 },
+    { "", 0 },
+    { "beq", 0x0C258420 },
+    { "bge", 0x0C000420 },
+    { "bgeu", 0x0C000420 },
+    { "bgez", 0x0E1B0400 },
+    { "bgt", 0x0C000420 },
+    { "bgtu", 0x0C000420 },
+    { "bgtz", 0x0E270400 },
+    { "ble", 0x0C000420 },
+    { "bleu", 0x0C000420 },
+    { "blez", 0x0E268400 },
+    { "blt", 0x0C000420 },
+    { "bltu", 0x0C000420 },
+    { "bltz", 0x0E1A8400 },
+    { "bne", 0x0C260420 },
+    { "break", 0x58000 },
+    { "c0", 0x12318000 },
+    { "c1", 0x12320000 },
+    { "c2", 0x12328000 },
+    { "", 0 },
+    { "div", 0x06090421 },
+    { "divu", 0x06098421 },
+    { "j", 0x0A248400 },
+    { "jal", 0x0A250400 },
+    { "la", 0x02000400 },
+    { "lb", 0x02330460 },
+    { "lbu", 0x02350460 },
+    { "lh", 0x02338460 },
+    { "lhu", 0x02358460 },
+    { "li", 0x04000400 },
+    { "lw", 0x02348460 },
+    { "jr", 0x0A040400 },
+    { "lwc1", 0x02399060 },
+    { "lwc2", 0x023A0460 },
+    { "pref", 0x1E9E0460 },
+    { "mfhi", 0x14060400 },
+    { "mflo", 0x14070400 },
+    { "move", 0x08000420 },
+    { "jalr", 0x0A048400 },
+    { "swc1", 0x023B1060 },
+    { "swc2", 0x023B8460 },
+    { "", 0 },
+    { "mthi", 0x14068400 },
+    { "mtlo", 0x14078400 },
+    { "mul", 0x06000421 },
+    { "mulo", 0x06000421 },
+    { "mulou", 0x06000421 },
+    { "mult", 0x08080420 },
+    { "multu", 0x08088420 },
+    { "neg", 0x08000420 },
+    { "nop", 0x8000 },
+    { "nor", 0x060D8421 },
+    { "or", 0x060C8421 },
+    { "rem", 0x06090421 },
+    { "remu", 0x06098421 },
+    { "rfe", 0x498000 },
+    { "rol", 0x06000421 },
+    { "ror", 0x06000421 },
+    { "sb", 0x02368460 },
+    { "seq", 0x06000421 },
+    { "sge", 0x06000421 },
+    { "sgeu", 0x06000421 },
+    { "sgt", 0x06000421 },
+    { "sgtu", 0x06000421 },
+    { "sh", 0x02370460 },
+    { "sle", 0x06000421 },
+    { "sleu", 0x06000421 },
+    { "sll", 0x06010421 },
+    { "slt", 0x06000421 },
+    { "sltu", 0x06000421 },
+    { "sne", 0x06000421 },
+    { "sra", 0x06020421 },
+    { "srl", 0x06018421 },
+    { "sub", 0x060B0421 },
+    { "subu", 0x060B8421 },
+    { "sw", 0x02380460 },
+    { "syscall", 0x50000 },
+    { "xor", 0x060D0421 },
+    { "not", 0x08000420 },
+    { "lwl", 0x02340460 },
+    { "lwr", 0x02360460 },
+    { "swl", 0x02378460 },
+    { "swr", 0x02388460 },
+    { "", 0 },
+    { "mfc0", 0x084584E0 },
+    { "mfc1", 0x08460480 },
+    { "mfc2", 0x084684E0 },
+    { "", 0 },
+    { "mtc0", 0x084784E0 },
+    { "mtc1", 0x08480480 },
+    { "mtc2", 0x084884E0 },
+    { "sync", 0x4C0000 },
+    { "tlbr", 0x4A0000 },
+    { "tlbwi", 0x4A8000 },
+    { "tlbwr", 0x4B0000 },
+    { "tlbp", 0x4B8000 },
+    { "ld", 0x023C8860 },
+    { "sd", 0x023D0860 },
+    { "", 0 },
+    { "ldc1", 0x023D9460 },
+    { "ldc2", 0x023E2060 },
+    { "tlbr1", 0x9E8000 },
+    { "tlbp1", 0x9F0000 },
+    { "sdc1", 0x023E9460 },
+    { "sdc2", 0x023F2060 },
+    { "", 0 },
+    { "l.s", 0x02001460 },
+    { "l.d", 0x02001460 },
+    { "l.e", 0x02001860 },
+    { "s.s", 0x02001460 },
+    { "s.d", 0x02001460 },
+    { "s.e", 0x02001860 },
+    { "add.s", 0x065014A5 },
+    { "add.d", 0x065094A5 },
+    { "add.e", 0x065118C6 },
+    { "sub.s", 0x065194A5 },
+    { "sub.d", 0x065214A5 },
+    { "sub.e", 0x065298C6 },
+    { "mul.s", 0x065314A5 },
+    { "mul.d", 0x065394A5 },
+    { "mul.e", 0x065418C6 },
+    { "div.s", 0x065494A5 },
+    { "div.d", 0x065514A5 },
+    { "div.e", 0x065598C6 },
+    { "sqrt.s", 0x080014A0 },
+    { "sqrt.d", 0x080014A0 },
+    { "sqrt.e", 0x080018C0 },
+    { "mov.s", 0x080014A0 },
+    { "mov.d", 0x080014A0 },
+    { "mov.e", 0x080018C0 },
+    { "abs.s", 0x080014A0 },
+    { "abs.d", 0x080014A0 },
+    { "abs.e", 0x080018C0 },
+    { "cvt.s.d", 0x080014A0 },
+    { "cvt.s.e", 0x080014C0 },
+    { "cvt.s.w", 0x080014A0 },
+    { "cvt.d.s", 0x080014A0 },
+    { "cvt.d.e", 0x080014C0 },
+    { "cvt.d.w", 0x080014A0 },
+    { "cvt.e.s", 0x080018A0 },
+    { "cvt.e.d", 0x080018A0 },
+    { "cvt.e.w", 0x080018A0 },
+    { "cvt.w.s", 0x080014A0 },
+    { "cvt.w.d", 0x080014A0 },
+    { "cvt.w.e", 0x080014C0 },
+    { "c.f.s", 0x080030A5 },
+    { "c.f.d", 0x080030A5 },
+    { "c.f.e", 0x080030C6 },
+    { "c.un.s", 0x080030A5 },
+    { "c.un.d", 0x080030A5 },
+    { "c.un.e", 0x080030C6 },
+    { "c.eq.s", 0x080030A5 },
+    { "c.eq.d", 0x080030A5 },
+    { "c.eq.e", 0x080030C6 },
+    { "c.ueq.s", 0x080030A5 },
+    { "c.ueq.d", 0x080030A5 },
+    { "c.ueq.e", 0x080030C6 },
+    { "c.olt.s", 0x080030A5 },
+    { "c.olt.d", 0x080030A5 },
+    { "c.olt.e", 0x080030C6 },
+    { "c.ult.s", 0x080030A5 },
+    { "c.ult.d", 0x080030A5 },
+    { "c.ult.e", 0x080030C6 },
+    { "c.ole.s", 0x080030A5 },
+    { "c.ole.d", 0x080030A5 },
+    { "c.ole.e", 0x080030C6 },
+    { "c.ule.s", 0x080030A5 },
+    { "c.ule.d", 0x080030A5 },
+    { "c.ule.e", 0x080030C6 },
+    { "c.sf.s", 0x080030A5 },
+    { "c.sf.d", 0x080030A5 },
+    { "c.sf.e", 0x080030C6 },
+    { "c.ngle.s", 0x080030A5 },
+    { "c.ngle.d", 0x080030A5 },
+    { "c.ngle.e", 0x080030C6 },
+    { "c.seq.s", 0x080030A5 },
+    { "c.seq.d", 0x080030A5 },
+    { "c.seq.e", 0x080030C6 },
+    { "c.ngl.s", 0x080030A5 },
+    { "c.ngl.d", 0x080030A5 },
+    { "c.ngl.e", 0x080030C6 },
+    { "c.lt.s", 0x080030A5 },
+    { "c.lt.d", 0x080030A5 },
+    { "c.lt.e", 0x080030C6 },
+    { "c.nge.s", 0x080030A5 },
+    { "c.nge.d", 0x080030A5 },
+    { "c.nge.e", 0x080030C6 },
+    { "c.le.s", 0x080030A5 },
+    { "c.le.d", 0x080030A5 },
+    { "c.le.e", 0x080030C6 },
+    { "c.ngt.s", 0x080030A5 },
+    { "c.ngt.d", 0x080030A5 },
+    { "c.ngt.e", 0x080030C6 },
+    { "lui", 0x042D0400 },
+    { "ulw", 0x02000460 },
+    { "ulh", 0x02000460 },
+    { "ulhu", 0x02000460 },
+    { "usw", 0x02000460 },
+    { "ush", 0x02000460 },
+    { "addi", 0x06298420 },
+    { "addiu", 0x062A0420 },
+    { "slti", 0x062A8420 },
+    { "sltiu", 0x062B0420 },
+    { "andi", 0x062B8420 },
+    { "ori", 0x062C0420 },
+    { "xori", 0x062C8420 },
+    { "", 0 },
+    { "negu", 0x08000420 },
+    { "beqz", 0x0E258400 },
+    { "bnez", 0x0E260400 },
+    { "neg.s", 0x080014A0 },
+    { "neg.d", 0x080014A0 },
+    { "neg.e", 0x080018C0 },
+    { "cfc1", 0x084704E0 },
+    { "ctc1", 0x084904E0 },
+    { "bal", 0x0E1C0000 },
+    { "bgezal", 0x0E1C0400 },
+    { "bltzal", 0x0E1B8400 },
+    { "mtc1.d", 0x084808A0 },
+    { "mfc1.d", 0x084608A0 },
+    { "trunc.w.s", 0x060014A1 },
+    { "trunc.w.d", 0x060014A1 },
+    { "trunc.w.e", 0x060018C1 },
+    { "round.w.s", 0x060014A1 },
+    { "round.w.d", 0x060014A1 },
+    { "round.w.e", 0x060018C1 },
+    { "addou", 0x060A8421 },
+    { "subou", 0x060B8421 },
+    { "truncu.w.s", 0x060014A1 },
+    { "truncu.w.d", 0x060014A1 },
+    { "truncu.w.e", 0x060018C1 },
+    { "roundu.w.s", 0x060014A1 },
+    { "roundu.w.d", 0x060014A1 },
+    { "roundu.w.e", 0x060018C1 },
+    { "cfc0", 0x087A04E0 },
+    { "cfc2", 0x087A84E0 },
+    { "", 0 },
+    { "ctc0", 0x087B04E0 },
+    { "ctc2", 0x087B84E0 },
+    { "", 0 },
+    { "li.s", 0x167C2400 },
+    { "li.d", 0x167CA800 },
+    { "li.e", 0x167D2C00 },
+    { "tlt", 0x1A0F0420 },
+    { "tltu", 0x1A0F8420 },
+    { "tge", 0x1A100420 },
+    { "tgeu", 0x1A108420 },
+    { "teq", 0x1A110420 },
+    { "tne", 0x1A118420 },
+    { "ll", 0x02390460 },
+    { "sc", 0x023A8460 },
+    { "ceil.w.s", 0x060014A1 },
+    { "ceil.w.d", 0x060014A1 },
+    { "ceil.w.e", 0x060018C1 },
+    { "ceilu.w.s", 0x060014A1 },
+    { "ceilu.w.d", 0x060014A1 },
+    { "ceilu.w.e", 0x060018C1 },
+    { "floor.w.s", 0x060014A1 },
+    { "floor.w.d", 0x060014A1 },
+    { "floor.w.e", 0x060018C1 },
+    { "flooru.w.s", 0x060014A1 },
+    { "flooru.w.d", 0x060014A1 },
+    { "flooru.w.e", 0x060018C1 },
+    { "beql", 0x0C278420 },
+    { "beqzl", 0x0E278400 },
+    { "bnel", 0x0C280420 },
+    { "bnezl", 0x0E280400 },
+    { "blel", 0x0C000420 },
+    { "bleul", 0x0C000420 },
+    { "blezl", 0x0E288400 },
+    { "bgtl", 0x0C000420 },
+    { "bgtul", 0x0C000420 },
+    { "bgtzl", 0x0E290400 },
+    { "bltl", 0x0C000420 },
+    { "bltul", 0x0C000420 },
+    { "bltzl", 0x0E1F8400 },
+    { "bltzall", 0x0E208400 },
+    { "bgel", 0x0C000420 },
+    { "bgeul", 0x0C000420 },
+    { "bgezl", 0x0E200400 },
+    { "bgezall", 0x0E210400 },
+    { "bc0fl", 0x10218000 },
+    { "bc0tl", 0x10220000 },
+    { "bc1fl", 0x1022B000 },
+    { "bc1tl", 0x10233000 },
+    { "bc2fl", 0x10238000 },
+    { "bc2tl", 0x10240000 },
+    { "", 0 },
+    { "", 0 },
+    { "ldl", 0x023F8460 },
+    { "ldr", 0x02400460 },
+    { "lld", 0x02408460 },
+    { "lwu", 0x023C0460 },
+    { "sdl", 0x02410460 },
+    { "sdr", 0x02418460 },
+    { "scd", 0x02420460 },
+    { "daddi", 0x06308420 },
+    { "daddiu", 0x06310420 },
+    { "dadd", 0x06120421 },
+    { "daddu", 0x06128421 },
+    { "dsub", 0x06130421 },
+    { "dsubu", 0x06138421 },
+    { "dsll", 0x06140421 },
+    { "dsrl", 0x06148421 },
+    { "dsra", 0x06150421 },
+    { "dsllv", 0x06170421 },
+    { "dsrlv", 0x06178421 },
+    { "dsrav", 0x06180421 },
+    { "dmult", 0x08188420 },
+    { "dmultu", 0x08190420 },
+    { "ddiv", 0x06000421 },
+    { "ddivu", 0x06000421 },
+    { "", 0 },
+    { "", 0 },
+    { "dmtc1", 0x084C8480 },
+    { "dmfc1", 0x084D0480 },
+    { "dmtc0", 0x084D84E0 },
+    { "dmfc0", 0x084E04E0 },
+    { "dmtc2", 0x084E84E0 },
+    { "dmfc2", 0x084F04E0 },
+    { "dli", 0x1C000400 },
+    { "dla", 0x02000400 },
+    { "eret", 0x8D8000 },
+    { "trunc.l.s", 0x06001081 },
+    { "round.l.s", 0x06001081 },
+    { "ceil.l.s", 0x06001081 },
+    { "floor.l.s", 0x06001081 },
+    { "trunc.l.d", 0x06001081 },
+    { "round.l.d", 0x06001081 },
+    { "ceil.l.d", 0x06001081 },
+    { "floor.l.d", 0x06001081 },
+    { "trunc.l.e", 0x060010A1 },
+    { "round.l.e", 0x060010A1 },
+    { "ceil.l.e", 0x060010A1 },
+    { "floor.l.e", 0x060010A1 },
+    { "cvt.l.s", 0x08001080 },
+    { "cvt.l.d", 0x08001080 },
+    { "cvt.l.e", 0x080010A0 },
+    { "cvt.l.w", 0x08001080 },
+    { "cvt.s.l", 0x08001080 },
+    { "cvt.d.l", 0x08001080 },
+    { "cvt.e.l", 0x08001480 },
+    { "cvt.w.l", 0x08001080 },
+    { "cache", 0x1E4F8460 },
+    { "cia", 0x04000000 },
+    { "uld", 0x02000460 },
+    { "usd", 0x02000460 },
+    { "dabs", 0x08000420 },
+    { "dneg", 0x08000420 },
+    { "dnegu", 0x08000420 },
+    { "dmul", 0x06000421 },
+    { "dmulo", 0x06000421 },
+    { "dmulou", 0x06000421 },
+    { "drem", 0x06000421 },
+    { "dremu", 0x06000421 },
+    { "drol", 0x06000421 },
+    { "dror", 0x06000421 },
+    { "daddou", 0x06128421 },
+    { "dsubou", 0x06138421 },
+    { "ulwu", 0x02000460 },
+    { "movt", 0x0600042C },
+    { "movf", 0x0600042C },
+    { "movn", 0x06000421 },
+    { "movz", 0x06000421 },
+    { "madd.s", 0x20001084 },
+    { "madd.d", 0x20001084 },
+    { "madd.e", 0x200018C6 },
+    { "msub.s", 0x20001084 },
+    { "msub.d", 0x20001084 },
+    { "msub.e", 0x200018C6 },
+    { "nmadd.s", 0x20001084 },
+    { "nmadd.d", 0x20001084 },
+    { "nmadd.e", 0x200018C6 },
+    { "nmsub.s", 0x20001084 },
+    { "nmsub.d", 0x20001084 },
+    { "nmsub.e", 0x200018C6 },
+    { "recip.s", 0x08001080 },
+    { "recip.d", 0x08001080 },
+    { "rsqrt.s", 0x08001080 },
+    { "rsqrt.d", 0x08001080 },
+    { "movt.s", 0x0600108C },
+    { "movt.d", 0x0600108C },
+    { "movf.s", 0x0600108C },
+    { "movf.d", 0x0600108C },
+    { "movn.s", 0x06001081 },
+    { "movn.d", 0x06001081 },
+    { "movz.s", 0x06001081 },
+    { "movz.d", 0x06001081 },
+    { "lwxc1", 0x22001021 },
+    { "ldxc1", 0x22001021 },
+    { "swxc1", 0x22001021 },
+    { "sdxc1", 0x22001021 },
+    { "prefx", 0x22000421 },
+    { "dctr", 0 },
+    { "dctw", 0 },
+    { "tlbw", 0 },
+    { "nada", 0 },
+    { "ssnop", 0 },
+    { "dsll32", 0x06140421 },
+    { "dsrl32", 0x06148421 },
+    { "dsra32", 0x06150421 },
+    { "bc3f", 0x109F8000 },
+    { "bc3t", 0x10A00000 },
+    { "c3", 0x12A08000 },
+    { "lwc3", 0x02A10460 },
+    { "swc3", 0x02A18460 },
+    { "mfc3", 0x08A204E0 },
+    { "mtc3", 0x08A284E0 },
+    { "cfc3", 0x08A304E0 },
+    { "ctc3", 0x08A384E0 },
+    { "sllv", 0x06028421 },
+    { "srlv", 0x06030421 },
+    { "srav", 0x06038421 },
+    { "mfpc", 0x08A404E0 },
+    { "mtpc", 0x08A404E0 },
+    { "mfps", 0x08A404E0 },
+    { "mtps", 0x08A404E0 },
+    { "", 0 },
+    { NULL, 0 },
 };
 
-//in file struct
+// in file struct
 extern struct {
-    /* 0x000 */ char tokench;                            /* inferred */
+    /* 0x000 */ char tokench; /* inferred */
     /* 0x001 */ char tstring[0x400];
     /* 0x404 */ int length;
 } save;
 
-//external declarations
+// external declarations
 extern int debugflag;
 extern int CurrentFile;
 extern int errno;
@@ -541,7 +518,7 @@ extern FILE* binasmfyle;
 extern size_t binasm_count;
 extern int in_repeat_block;
 extern binasm_r binasm_rec;
-extern FILE *in_file;
+extern FILE* in_file;
 extern int nextinline;
 extern int local_label[0x100];
 extern char Tokench;
@@ -551,25 +528,25 @@ extern size_t rep_size;
 extern char token_tmp[0x100];
 extern int Tstringlength;
 
-//file declaration
-int map_glevel[4] = { 2, 1, 0, 3 }; //TODO: static or just a normal int?
-static int B_1000A810; //!< boolean, only used in this function
+// file declaration
+int map_glevel[4] = { 2, 1, 0, 3 }; // TODO: static or just a normal int?
+static int B_1000A810;              //!< boolean, only used in this function
 
-//external declaration
+// external declaration
 extern struct {
     binasm_r* unk0;
     size_t unk4;
 } rep_buffer;
 
 extern void postcerror(char* error, int arg1);
-extern void posterror(char* error, char *arg1, int arg2);
+extern void posterror(char* error, char* arg1, int arg2);
 extern void ltoa(int arg0, char* arg1);
 extern void new_error(void);
 extern void* grow_array(size_t* capacity_count, size_t new_count, size_t width, void* ptr, int clear_mem);
 extern int sym_enter(char* arg0, int arg1);
-extern void assertion_failed(const char* assertion, const char *file, int file_line);
+extern void assertion_failed(const char* assertion, const char* file, int file_line);
 
-//In file function declaration
+// In file function declaration
 int hex_to_num(char c);
 void make_local_label(char* name, size_t* out_len);
 static int func_0041244C(void);
@@ -613,11 +590,11 @@ int hex_to_num(char c) {
 }
 
 void make_local_label(char* name, size_t* out_len) {
-    unsigned int i; // sp+2C
+    unsigned int i;   // sp+2C
     unsigned int num; // sp28
-    size_t name_len; // sp+24
-    char last_c; // sp+23
-    size_t full_len; // sp20
+    size_t name_len;  // sp+24
+    char last_c;      // sp+23
+    size_t full_len;  // sp20
 
     name_len = strlen(name);
     if (strcmp(token_tmp, name) != 0) {
@@ -675,8 +652,8 @@ void make_file(char* file_name) {
 
 static unsigned int func_0040F5D8(char* in, int is_signed) {
     unsigned int digit;
-    unsigned int num; // s2
-    unsigned int ret; // s4 // digit count/return
+    unsigned int num;   // s2
+    unsigned int ret;   // s4 // digit count/return
     unsigned int radix; // s5
 
     num = 0;
@@ -715,7 +692,7 @@ static unsigned int func_0040F5D8(char* in, int is_signed) {
     if (is_signed) {
         // INT32_MIN has no positive equivalent, every other representable number does
         if (num != 0x80000000) {
-            ret = - num;
+            ret = -num;
         }
     }
 
@@ -727,7 +704,7 @@ static long long func_0040F77C(char* arg0, int arg1) {
 
     errno = 0;
     if (Tokench == 'h') {
-        var_v1 =  strtoull(arg0, NULL, 0x10);
+        var_v1 = strtoull(arg0, NULL, 0x10);
     } else {
         var_v1 = strtoll(arg0, NULL, 0);
     }
@@ -749,12 +726,8 @@ int hash(char* name) {
         assertion_failed("i > 0", "as0util.c", 229);
     }
 
-    sp20 = (name[1] * 0xD)
-        + (name[MIN(var_a3, 2)] * 0x11)
-        + (name[MIN(var_a3, 3)] * 0xB)
-        + (name[MAX(var_a3 - 2, 1)] * 3)
-        + (name[MAX(var_a3 - 1, 1)] * 7)
-        + (name[var_a3] * 0x13);
+    sp20 = (name[1] * 0xD) + (name[MIN(var_a3, 2)] * 0x11) + (name[MIN(var_a3, 3)] * 0xB) +
+           (name[MAX(var_a3 - 2, 1)] * 3) + (name[MAX(var_a3 - 1, 1)] * 7) + (name[var_a3] * 0x13);
 
     return sp20 % 128;
 }
@@ -763,7 +736,7 @@ int LookUp(char* name, sym** arg1) {
     sym* var_s0;
 
     *arg1 = NULL;
-    for (var_s0 = hashtable[hash(name)] ; var_s0 != NULL ; var_s0 = var_s0->next) {
+    for (var_s0 = hashtable[hash(name)]; var_s0 != NULL; var_s0 = var_s0->next) {
         if (strcmp(name, var_s0->name) == 0) {
             *arg1 = var_s0;
             return FOUND;
@@ -777,7 +750,7 @@ int opLookUp(char* name, sym** arg1) {
 
     *arg1 = NULL;
 
-    for(op = ophashtable[hash(name)]; op != NULL ; op = op->next){
+    for (op = ophashtable[hash(name)]; op != NULL; op = op->next) {
         if (strcmp(name, op->name) == 0) {
             *arg1 = op;
             return FOUND;
@@ -825,7 +798,7 @@ static int func_0040FC20(int radix) {
 }
 
 static void func_0040FD98(void) {
-    int sp2C; // sp+2C
+    int sp2C;  // sp+2C
     int pad28; // sp+28
     int radix; // sp+24
 
@@ -834,7 +807,7 @@ static void func_0040FD98(void) {
     Tstringlength = 2;
     nextinline++;
 
-    sp2C =  func_0040FC20(16);
+    sp2C = func_0040FC20(16);
     if ((linelength >= nextinline) && (line[nextinline] == '.')) {
         Tokench = 'f';
         consume();
@@ -880,9 +853,9 @@ static void func_0040FD98(void) {
 static void func_004100C8(void) {
 
     Tokench = 'd';
-     while ((nextinline < linelength) && (line[nextinline] >= '0') && (line[nextinline] < '9')) {
+    while ((nextinline < linelength) && (line[nextinline] >= '0') && (line[nextinline] < '9')) {
         consume();
-     }
+    }
     func_0040FB2C();
 }
 
@@ -917,7 +890,7 @@ int dot_soon(int arg0) {
 
 void nexttoken(void) {
     int digits_left; // remaining digits in octal/hex escape code
-    int num; // numeric value of octal/hex escape code
+    int num;         // numeric value of octal/hex escape code
     char c;
     int pad[3];
     int sp4C = 0;
@@ -934,7 +907,7 @@ void nexttoken(void) {
     Tstringlength = 0;
 
     // skip spaces
-    while((nextinline < linelength) && (line[nextinline] == ' ')){
+    while ((nextinline < linelength) && (line[nextinline] == ' ')) {
         nextinline++;
     }
 
@@ -979,10 +952,9 @@ void nexttoken(void) {
         default:
 
             if (((c >= '1') && (c <= '9')) // unambiguously decimal digits
-                || ((nextinline < linelength)
-                    && (((c == '.') && isdigit(line[nextinline]))
-                    || ((c == '0') && dot_soon(nextinline))))  // floats?
-                ) {
+                || ((nextinline < linelength) &&
+                    (((c == '.') && isdigit(line[nextinline])) || ((c == '0') && dot_soon(nextinline)))) // floats?
+            ) {
 
                 if (c == '.') { // floats that start with '.'?
                     Tokench = 'f';
@@ -1001,7 +973,7 @@ void nexttoken(void) {
                         consume();
                         Tokench = 'i';
                         func_00410270(token_tmp);
-                        make_local_label(token_tmp, (size_t*)&Tstringlength); //TODO
+                        make_local_label(token_tmp, (size_t*)&Tstringlength); // TODO
                         func_0040FB2C();
                         break;
                     }
@@ -1021,7 +993,7 @@ void nexttoken(void) {
                 }
 
                 // expenents of floats
-                if (nextinline < linelength){
+                if (nextinline < linelength) {
                     if ((line[nextinline] == 'e') || (line[nextinline] == 'E')) {
                         line[nextinline] = 'e';
                         consume();
@@ -1124,7 +1096,7 @@ void nexttoken(void) {
                                 sp4C = 1;
                                 num = 0;
 
-                                if (((c >= '0') && (c <= '7'))){
+                                if (((c >= '0') && (c <= '7'))) {
                                     // octal
                                     digits_left = 3;
                                     while (digits_left > 0) {
@@ -1205,20 +1177,14 @@ static char func_00410E80(void) {
     int line_number;
     char buf[BUF_COUNT]; // sp+44
 
-    for (c = fgetc(in_file);
-        (c == ' ') || (c == '\t');
-        c = fgetc(in_file)) {}
+    for (c = fgetc(in_file); (c == ' ') || (c == '\t'); c = fgetc(in_file)) {}
 
     if (c == 'l') {
-        if (((char)fgetc(in_file) != 'i')
-            || ((char)fgetc(in_file) != 'n')
-            || ((char)fgetc(in_file) != 'e')) {
+        if (((char)fgetc(in_file) != 'i') || ((char)fgetc(in_file) != 'n') || ((char)fgetc(in_file) != 'e')) {
             posterror("Expected cpp-generated line number", NULL, 1);
             exit(1);
         }
-        for (c = fgetc(in_file);
-            (c == ' ') || (c == '\t');
-            c = fgetc(in_file)) {}
+        for (c = fgetc(in_file); (c == ' ') || (c == '\t'); c = fgetc(in_file)) {}
     }
 
     if (!(isdigit(c))) {
@@ -1270,13 +1236,13 @@ static char func_00410E80(void) {
 }
 
 void readinline(void) {
-    char c; //sp+46F
+    char c; // sp+46F
     char prev_c;
     int found_eol; // sp+468
     int i;
     int pad;
     char buf[0x420]; // sp+40
-    int var_t0; // sp+3C // not in a character constant or an escaped character
+    int var_t0;      // sp+3C // not in a character constant or an escaped character
 
     i = 0;
     prev_c = ' ';
@@ -1370,8 +1336,7 @@ char* alloc_new_string(char* arg0) {
 void EnterSym(char* name, sym** arg1, int arg2) {
     sym* sp2C;
     int sp28;
-    // s32* temp_v0;
-    // s32** temp_v1;
+
     if (LookUp(name, &sp2C) == 0) {
         sp28 = hash(name);
         sp2C = alloc_new_sym();
@@ -1414,10 +1379,10 @@ sym* GetRegister() {
 
 static int func_00411898(void) {
     int minus; // sp+3C
-    int not; // sp+38
-    int sp34; // sp+34
+    int not ;  // sp+38
+    int sp34;  // sp+34
     sym* sp30; // sp+30
-    int ret; // sp+2C
+    int ret;   // sp+2C
 
     sp34 = 0;
     minus = 0;
@@ -1433,47 +1398,47 @@ static int func_00411898(void) {
     }
 
     // if (Tokench != 0x22) {
-        switch (Tokench) {                          /* irregular */
-            case '(':
-                nexttoken();
-                sp34 = func_0041244C();
-                if (Tokench != ')') {
-                    posterror("Right paren expected", NULL, 1);
-                }
-                break;
+    switch (Tokench) { /* irregular */
+        case '(':
+            nexttoken();
+            sp34 = func_0041244C();
+            if (Tokench != ')') {
+                posterror("Right paren expected", NULL, 1);
+            }
+            break;
 
-                case 'i':
-                if (LookUp(Tstring, &sp30) == 0) {
-                    posterror("undefined symbol in expression", NULL, 1);
-                } else if (sp30->unk10 != 4) {
-                    posterror("Symbol must have absolute value", Tstring, 1);
-                } else {
-                    sp34 = sp30->unk8;
-                }
-                break;
+        case 'i':
+            if (LookUp(Tstring, &sp30) == 0) {
+                posterror("undefined symbol in expression", NULL, 1);
+            } else if (sp30->unk10 != 4) {
+                posterror("Symbol must have absolute value", Tstring, 1);
+            } else {
+                sp34 = sp30->unk8;
+            }
+            break;
 
-            case 'd':
-            case 'h':
-                sp34 = func_0040F5D8(Tstring, minus);
-                minus = 0;
-                break;
+        case 'd':
+        case 'h':
+            sp34 = func_0040F5D8(Tstring, minus);
+            minus = 0;
+            break;
 
-            case '"':
-                minus = 0;
-                sp34 = Tstring[0];
-                if (Tstringlength >= 2) {
-                    posterror("String within expression may have only one character", Tstring, 1);
-                }
-                break;
+        case '"':
+            minus = 0;
+            sp34 = Tstring[0];
+            if (Tstringlength >= 2) {
+                posterror("String within expression may have only one character", Tstring, 1);
+            }
+            break;
 
-            default:
-                posterror("Invalid symbol in expression", NULL, 1);
-                nexttoken();
-                break;
-        }
+        default:
+            posterror("Invalid symbol in expression", NULL, 1);
+            nexttoken();
+            break;
+    }
     if (minus) {
         ret = -sp34;
-    } else if (not) {
+    } else if (not ) {
         ret = ~sp34;
     } else {
         ret = sp34;
@@ -1483,11 +1448,11 @@ static int func_00411898(void) {
 }
 
 static long long func_00411B84(void) {
-    int sp44; // sp+44
-    int sp40; // sp+40
+    int sp44;       // sp+44
+    int sp40;       // sp+40
     long long sp38; // sp+38
-    sym* sp34; // sp+34
-    long long ret; // sp+28
+    sym* sp34;      // sp+34
+    long long ret;  // sp+28
 
     sp38 = 0;
     sp44 = 0;
@@ -1560,51 +1525,43 @@ static unsigned int func_00411ECC(void) {
 
     var_s2 = func_00411898();
 
-    while ((Tokench == '*')
-        || (Tokench == '/')
-        || (Tokench == '%')
-        || (Tokench == '<')
-        || (Tokench == '>')
-        || (Tokench == '^')
-        || (Tokench == '&')
-        || (Tokench == '|')
-        ) {
+    while ((Tokench == '*') || (Tokench == '/') || (Tokench == '%') || (Tokench == '<') || (Tokench == '>') ||
+           (Tokench == '^') || (Tokench == '&') || (Tokench == '|')) {
         var_s0 = var_s2;
         temp_s1 = Tokench;
         nexttoken();
         temp_v0 = func_00411898();
         switch (temp_s1) {
-        case '*':
-            var_s2 = var_s0 * temp_v0;
-            break;
-        case '/':
-            var_s2 = var_s0 / temp_v0;
-            break;
-        case '%':
-            var_s2 = var_s0 % temp_v0;
-            break;
-        case '<':
-            var_s2 = var_s0 << temp_v0;
-            break;
-        case '>':
-            var_s2 = (unsigned int) var_s0 >> temp_v0;
-            break;
-        case '^':
-            var_s2 = var_s0 ^ temp_v0;
-            break;
-        case '&':
-            var_s2 = var_s0 & temp_v0;
-            break;
-        case '|':
-            var_s2 = var_s0 | temp_v0;
-            break;
+            case '*':
+                var_s2 = var_s0 * temp_v0;
+                break;
+            case '/':
+                var_s2 = var_s0 / temp_v0;
+                break;
+            case '%':
+                var_s2 = var_s0 % temp_v0;
+                break;
+            case '<':
+                var_s2 = var_s0 << temp_v0;
+                break;
+            case '>':
+                var_s2 = (unsigned int)var_s0 >> temp_v0;
+                break;
+            case '^':
+                var_s2 = var_s0 ^ temp_v0;
+                break;
+            case '&':
+                var_s2 = var_s0 & temp_v0;
+                break;
+            case '|':
+                var_s2 = var_s0 | temp_v0;
+                break;
         }
     }
     return var_s2;
 }
 
 static long long func_0041213C(void) {
-
 }
 
 static long long func_00412144(void) {
@@ -1616,44 +1573,37 @@ static long long func_00412144(void) {
     var_s2 = func_00411B84();
     func_0041213C();
 
-    while ((Tokench == '*')
-        || (Tokench == '/')
-        || (Tokench == '%')
-        || (Tokench == '<')
-        || (Tokench == '>')
-        || (Tokench == '^')
-        || (Tokench == '&')
-        || (Tokench == '|')
-        ) {
+    while ((Tokench == '*') || (Tokench == '/') || (Tokench == '%') || (Tokench == '<') || (Tokench == '>') ||
+           (Tokench == '^') || (Tokench == '&') || (Tokench == '|')) {
         var_s0 = var_s2;
         temp_s1 = Tokench;
         nexttoken();
         temp_v0 = func_00411B84();
         switch (temp_s1) {
-        case '*':
-            var_s2 = var_s0 * temp_v0;
-            break;
-        case '/':
-            var_s2 = var_s0 / temp_v0;
-            break;
-        case '%':
-            var_s2 = var_s0 % temp_v0;
-            break;
-        case '<':
-            var_s2 = var_s0 << temp_v0;
-            break;
-        case '>':
-            var_s2 = (unsigned long long) var_s0 >> temp_v0;
-            break;
-        case '^':
-            var_s2 = var_s0 ^ temp_v0;
-            break;
-        case '&':
-            var_s2 = var_s0 & temp_v0;
-            break;
-        case '|':
-            var_s2 = var_s0 | temp_v0;
-            break;
+            case '*':
+                var_s2 = var_s0 * temp_v0;
+                break;
+            case '/':
+                var_s2 = var_s0 / temp_v0;
+                break;
+            case '%':
+                var_s2 = var_s0 % temp_v0;
+                break;
+            case '<':
+                var_s2 = var_s0 << temp_v0;
+                break;
+            case '>':
+                var_s2 = (unsigned long long)var_s0 >> temp_v0;
+                break;
+            case '^':
+                var_s2 = var_s0 ^ temp_v0;
+                break;
+            case '&':
+                var_s2 = var_s0 & temp_v0;
+                break;
+            case '|':
+                var_s2 = var_s0 | temp_v0;
+                break;
         }
     }
     return var_s2;
@@ -1707,7 +1657,6 @@ static long long func_00412548(void) {
                 sp38 = sp30 - temp_v0;
                 break;
         }
-
     }
 
     return sp38;
@@ -1716,14 +1665,8 @@ static long long func_00412548(void) {
 int GetExpr(void) {
     int sp24 = 0;
 
-    if ((Tokench == 'i')
-        || (Tokench == 'd')
-        || (Tokench == 'h')
-        || (Tokench == '+')
-        || (Tokench == '-')
-        || (Tokench == '~')
-        || (Tokench == '(')
-        || ((Tokench == '"'))) {
+    if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-') ||
+        (Tokench == '~') || (Tokench == '(') || ((Tokench == '"'))) {
         sp24 = func_0041244C();
         if (Tokench == ',') {
             nexttoken();
@@ -1738,14 +1681,8 @@ int GetExpr(void) {
 int dw_GetExpr(unsigned int* high, unsigned int* low) {
     unsigned long long val64;
 
-    if ((Tokench == 'i')
-        || (Tokench == 'd')
-        || (Tokench == 'h')
-        || (Tokench == '+')
-        || (Tokench == '-')
-        || (Tokench == '~')
-        || (Tokench == '(')
-        || (Tokench == '"')) {
+    if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-') ||
+        (Tokench == '~') || (Tokench == '(') || (Tokench == '"')) {
         val64 = func_00412548();
         func_0041213C();
         if (Tokench == ',') {
@@ -1762,7 +1699,6 @@ int dw_GetExpr(unsigned int* high, unsigned int* low) {
     return (*high != 0) && ((*high != 0xFFFFFFFF) || ((int)val64 >= 0));
     // This returns false when `0 <= S <= UINT32_MAX` or `INT32_MIN <= (s64)S <= -1`,
     // in other words, it returns true when `S` *cannot* be expressed as a 32-bit integer, of either type.
-
 }
 
 void GetBaseOrExpr(sym** arg0, int* arg1) {
@@ -1790,7 +1726,7 @@ void GetItem(int* arg0, int* arg1) {
         *arg1 = GetExpr();
         return;
     } else {
-    *arg1 = 1;
+        *arg1 = 1;
     }
 }
 
@@ -1806,7 +1742,7 @@ void dw_GetItem(unsigned int* arg0, unsigned int* arg1, int* arg2) {
 
 void put_binasmfyle(void) {
     if (in_repeat_block) {
-    size_t size = rep_size;
+        size_t size = rep_size;
 
         if (size >= rep_buffer.unk4) {
             rep_buffer.unk0 = grow_array(&rep_buffer.unk4, size, 0x10, rep_buffer.unk0, 0);

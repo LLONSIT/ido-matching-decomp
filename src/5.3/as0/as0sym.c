@@ -16,8 +16,7 @@ static int D_10000024 = 0;
 
 extern void postcerror(char* error, int arg1);
 
-
-//local declaration
+// local declaration
 static void func_0040E180(char* error, char* arg1, int arg2);
 int sym_undefined(int arg0);
 static void func_0040E230(int arg0, int st, int sc, int arg3, int arg4);
@@ -83,7 +82,7 @@ static void func_0040E230(int arg0, int st, int sc, int arg3, int arg4) {
 }
 
 static void func_0040E3F0(int arg0, int arg1, int arg2, int arg3) {
-    DNR* mP; //mld pointer
+    DNR* mP; // mld pointer
     pEXTR temp_s0;
 
     mP = st_pdn_idn(arg0);
@@ -112,7 +111,8 @@ static void func_0040E554(int arg0, int arg1, int arg2, int arg3, int arg4) {
     temp_s0 = st_pext_iext(sp44->index);
     sp3C = ((arg1 == 0xE) || (arg1 == 6)) && (temp_s0->asym.index == 0xFFFFF) && arg4;
 
-    sp44->index = st_symadd(st_stradd(st_str_extiss(temp_s0->asym.iss)), arg3, arg1, arg2, sp3C ? st_auxisymadd(-1) : temp_s0->asym.index);
+    sp44->index = st_symadd(st_stradd(st_str_extiss(temp_s0->asym.iss)), arg3, arg1, arg2,
+                            sp3C ? st_auxisymadd(-1) : temp_s0->asym.index);
 
     if (sp3C) {
         st_auxbtadd(0);
@@ -175,13 +175,13 @@ void sym_finish(char* arg0, char* arg1) {
 }
 
 int sym_enter(char* arg0, int arg1) {
-    return st_idn_index_fext( st_extadd(st_extstradd(arg0), 0, 0, 0, 0xFFFFF), 1);
+    return st_idn_index_fext(st_extadd(st_extstradd(arg0), 0, 0, 0, 0xFFFFF), 1);
 }
 
 int sym_define(int arg0, unsigned int section, int arg2) {
     int value; // sp3C
-    int sc; // sp38
-    int st; // sp34
+    int sc;    // sp38
+    int st;    // sp34
     int index; // sp30
     char* sp2C;
 
@@ -320,7 +320,6 @@ int sym_define(int arg0, unsigned int section, int arg2) {
 }
 
 void st_feinit(void) {
-
 }
 
 void itoa(int arg0, char* arg1) {

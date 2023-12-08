@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
 
-//array declaration (Only declared in this file)
-char *opt_strings[0x6D] = {
+// array declaration (Only declared in this file)
+char* opt_strings[0x6D] = {
     "-EB",
     "-EL",
     "-G",
@@ -112,10 +112,10 @@ char *opt_strings[0x6D] = {
     "",
 };
 
-#define MAX(a, b) ((a > b) ? a: b)
-#define MIN(a, b) ((a > b) ? b: a)
+#define MAX(a, b) ((a > b) ? a : b)
+#define MIN(a, b) ((a > b) ? b : a)
 
-//Global declaration
+// Global declaration
 extern int CurrentLine;
 extern int debugflag;
 extern int severity;
@@ -127,25 +127,25 @@ extern int warnexitflag;
 extern int printedline;
 extern char line[0x420];
 
-//file declaration
+// file declaration
 static int D_10001094 = 0;
-static char* as0_msg[5] = { "Internal", "Error", "Warning", "Info", ""};
+static char* as0_msg[5] = { "Internal", "Error", "Warning", "Info", "" };
 static int D_10001090 = 0;
 
-//Extern declaration
+// Extern declaration
 extern void* xmalloc(unsigned int);
 extern void* xrealloc(void*, unsigned int);
-extern char *st_str_idn(int idn);
+extern char* st_str_idn(int idn);
 
-//Local declaration
+// Local declaration
 static void func_00413060(char* arg0, int arg1);
 static void func_00413224(char* arg0);
 void call_name_and_line(int arg0);
 void call_perror(int arg0, char* arg1);
 void new_error(void);
-void posterror(char* error, char *arg1, int arg2);
+void posterror(char* error, char* arg1, int arg2);
 void postcerror(char* error, int arg1);
-void assertion_failed(char *assert_name, char *file, int file_line);
+void assertion_failed(char* assert_name, char* file, int file_line);
 int which_opt(char* name);
 void* grow_array(size_t* capacity_count, size_t new_count, size_t width, void* ptr, int clear_mem);
 
@@ -212,7 +212,7 @@ void new_error(void) {
     fflush(stderr);
 }
 
-void posterror(char* error, char *arg1, int arg2) {
+void posterror(char* error, char* arg1, int arg2) {
     if (warnexitflag != 0) {
         severity = MIN(arg2, severity);
     }
@@ -238,7 +238,7 @@ void postcerror(char* error, int arg1) {
     }
 }
 
-void assertion_failed(char *assert_name, char *file, int file_line) {
+void assertion_failed(char* assert_name, char* file, int file_line) {
     call_name_and_line(0);
     fprintf(stderr, "%s, line %1d:\n", file, file_line);
     if (assert_name != 0) {
@@ -295,4 +295,3 @@ void* grow_array(size_t* capacity_count, size_t new_count, size_t width, void* p
     }
     return new_ptr;
 }
-

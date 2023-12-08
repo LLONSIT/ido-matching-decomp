@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
+#include "ctype.h"
 #include "asm.h"
 #include "binasm_rec.h"
 #include "cmplrs/binasm.h" //Original binsasm file
@@ -11,8 +11,7 @@ extern struct {
     size_t unk4;
 } rep_buffer;
 
-
-//external declarations
+// external declarations
 extern char isa;
 extern int atflag;
 extern FILE* extsyms_file;
@@ -44,20 +43,20 @@ extern int printedline;
 extern unsigned int rep_count;
 extern binasm_r binasm_rec;
 extern int isStruct;
-//File declarations
+// File declarations
 //.data
-static char* D_10000004[4] = {"", "operand 1", "operand 2", "operand 3"};
+
+static char* D_10000004[4] = { "", "operand 1", "operand 2", "operand 3" };
 int gform_extn = 0;
 static int* D_10000014 = NULL;
 
 //.bss
 /* 029800 1000A800 */ int freg4;
 
-
-//External function call
+// External function call
 extern int LookUp(char*, sym**);
-extern void posterror(char* error, char *reg, int file_line);
-extern void assertion_failed(const char* assertion, const char *file, int file_line);
+extern void posterror(char* error, char* reg, int file_line);
+extern void assertion_failed(const char* assertion, const char* file, int file_line);
 extern void put_binasmfyle(void);
 extern char* alloc_new_string(char*);
 extern int hash(char*);
@@ -67,7 +66,7 @@ extern void nexttoken(void);
 extern int GetExpr(void);
 extern int sym_define(int arg0, unsigned int arg1, int arg2);
 extern void GetItem(int* arg0, int* arg1);
-extern void dw_GetItem(unsigned int *arg0, unsigned int *arg1, int* arg2);
+extern void dw_GetItem(unsigned int* arg0, unsigned int* arg1, int* arg2);
 extern int hex_to_num(char c);
 extern int dw_GetExpr(unsigned int* high, unsigned int* low);
 extern void EnterSym(char* arg0, sym** arg1, int arg2);
@@ -75,7 +74,7 @@ extern sym* GetRegister(void);
 extern void GetBaseOrExpr(sym** arg0, int* arg1);
 extern int sym_undefined(int arg0);
 extern int st_procend(int);
-extern void make_file(char *filename);
+extern void make_file(char* filename);
 extern void new_error(void);
 extern void GetItem(int* arg0, int* arg1);
 extern int which_opt(char* name);
@@ -83,7 +82,7 @@ extern void make_local_label(char* name, size_t* out_len);
 extern int opLookUp(char* name, struct sym** arg1);
 extern void call_name_and_line(int arg0);
 
-//In file declaration (Static)
+// In file declaration (Static)
 static void func_00404B80(int operand_index, int reg, int asm_index);
 static void func_00405178(int arg0, int arg1, int arg2, int arg3, unsigned arg4, int arg5, int arg6);
 static void func_004054E8(int arg0, char* arg1);
@@ -96,8 +95,8 @@ static void func_00405574(int arg0);
 static void func_004055D4(char* symbol_name);
 static void func_004056DC(char* arg0);
 static void func_004058F0(int arg0);
-static void func_00405A80(int* arg0, int *arg1);
-static void func_00405B54(unsigned int *arg0, unsigned int *arg1, int *arg2);
+static void func_00405A80(int* arg0, int* arg1);
+static void func_00405B54(unsigned int* arg0, unsigned int* arg1, int* arg2);
 static void func_00405C28(char* in, int in_len, unsigned int* hi_word, unsigned int* lo_word);
 static void func_00406034(void);
 static void func_004061F8(int arg0);
@@ -142,7 +141,7 @@ static void func_0040B554(int arg0);
 static void func_0040B5F0(int arg0);
 static int func_0040B984(void);
 static void func_0040BC84(void);
-static int func_0040BEBC(int* arg0, int *arg1, int *arg2);
+static int func_0040BEBC(int* arg0, int* arg1, int* arg2);
 static void func_0040C048(void);
 static void func_0040C218(void);
 static void func_0040C2E0(void);
@@ -166,104 +165,105 @@ static void func_0040D284(char* arg0);
 static void func_00404B80(int operand_index, int reg, int asm_index) {
     unsigned int var_v0;
 
-    switch (operand_index) {                                 /* switch 1; irregular */
-    default:                                        /* switch 1 */
-    case 1:                                         /* switch 1 */
-        var_v0 = asm_info[asm_index].unk4 << 0x11  >> 0x1B;
-        break;
-    case 2:                                         /* switch 1 */
-        var_v0 = asm_info[asm_index].unk4 << 0x16 >> 0x1B;
-        break;
-    case 3:                                         /* switch 1 */
-        var_v0 = asm_info[asm_index].unk4 & 0x2F;
-        break;
+    switch (operand_index) { /* switch 1; irregular */
+        default:
+        case 1:
+            var_v0 = asm_info[asm_index].unk4 << 0x11 >> 0x1B;
+            break;
+        case 2:
+            var_v0 = asm_info[asm_index].unk4 << 0x16 >> 0x1B;
+            break;
+        case 3:
+            var_v0 = asm_info[asm_index].unk4 & 0x2F;
+            break;
     }
     switch (var_v0) {
-    case 0: break;
-    case 1:
-        if ((atflag != 0) && (reg == 1)) {
-            posterror("Used $at without .set noat", D_10000004[operand_index], 2);
-        } else if ((reg < 0) || (reg >= 0x20)) {
-            posterror("Should be gp register", D_10000004[operand_index], 1);
-        }
-        break;
-    case 2:
-        if ((isa < ISA_MIPS3) && ((reg < 0) || (reg >= 0x20) || (reg & 1))) {
-            posterror("Should be even gp register", D_10000004[operand_index], 1);
-        }
-        break;
-    case 3:
-        if (((reg < 0) || (reg >= 0x20)) && (reg != 0x48)) {
-            posterror("Should be gp register", D_10000004[operand_index], 1);
-        } else if (atflag != 0) {
-            if (reg == 1) {
+        case 0:
+            break;
+        case 1:
+            if ((atflag != 0) && (reg == 1)) {
                 posterror("Used $at without .set noat", D_10000004[operand_index], 2);
+            } else if ((reg < 0) || (reg >= 0x20)) {
+                posterror("Should be gp register", D_10000004[operand_index], 1);
             }
-        }
-        break;
-    case 7:
-        if ((reg < 0) || (reg >= 0x20)) {
-            posterror("Should be coprocessor register", D_10000004[operand_index], 1);
-        }
-        break;
-    case 8:
-        if ((isa < ISA_MIPS3) && ((reg < 0) || (reg >= 0x20) || (reg & 1))) {
-            posterror("Should be even coprocessor register", D_10000004[operand_index], 1);
-        }
-        break;
-    case 4:
-        if ((reg < 0x20) || (reg >= 0x40)) {
-            posterror("Should be floating point register", D_10000004[operand_index], 1);
-        }
-        break;
-    case 5:
-        if (isa < ISA_MIPS3) {
-            if ((reg < 0x20) || (reg >= 0x40) || (reg & 1)) {
-                posterror("Should be even floating point register", D_10000004[operand_index], 1);
+            break;
+        case 2:
+            if ((isa < ISA_MIPS3) && ((reg < 0) || (reg >= 0x20) || (reg & 1))) {
+                posterror("Should be even gp register", D_10000004[operand_index], 1);
             }
-        }
-        break;
-    case 6:
-        if (isa >= ISA_MIPS3) {
-            if ((reg < 0x20) || (reg >= 0x40) || (reg & 1)) {
-                posterror("Should be even floating point register", D_10000004[operand_index], 1);
+            break;
+        case 3:
+            if (((reg < 0) || (reg >= 0x20)) && (reg != 0x48)) {
+                posterror("Should be gp register", D_10000004[operand_index], 1);
+            } else if (atflag != 0) {
+                if (reg == 1) {
+                    posterror("Used $at without .set noat", D_10000004[operand_index], 2);
+                }
             }
-        } else if ((reg < 0x20) || (reg >= 0x40) || (reg & 3)) {
-            posterror("Should be multiple-of-4 floating point register", D_10000004[operand_index], 1);
-        }
-        break;
-    case 9:
-        if ((isa < ISA_MIPS3) && (reg >= 0x20) && (reg & 1)) {
-            posterror("Should be fp double or gp single register", D_10000004[operand_index], 1);
-        }
-        break;
-    case 10:
-        if (isa < ISA_MIPS3) {
-            if (reg & 1) {
-                posterror("Should be multiple-of-2 register", D_10000004[operand_index], 1);
+            break;
+        case 7:
+            if ((reg < 0) || (reg >= 0x20)) {
+                posterror("Should be coprocessor register", D_10000004[operand_index], 1);
             }
-        }
-        break;
-    case 11:
-        if (isa >= ISA_MIPS3) {
-            if (reg & 1) {
-                posterror("Should be multiple-of-2 register", D_10000004[operand_index], 1);
+            break;
+        case 8:
+            if ((isa < ISA_MIPS3) && ((reg < 0) || (reg >= 0x20) || (reg & 1))) {
+                posterror("Should be even coprocessor register", D_10000004[operand_index], 1);
             }
-        } else if (reg & 3) {
-            posterror("Should be multiple-of-4 register", D_10000004[operand_index], 1);
-        }
-        break;
-    case 12:
-        if ((reg < 0x40) || (reg >= 0x48)) {
-            posterror("Should be floating point condition code register", D_10000004[operand_index], 1);
-        }
-        break;
+            break;
+        case 4:
+            if ((reg < 0x20) || (reg >= 0x40)) {
+                posterror("Should be floating point register", D_10000004[operand_index], 1);
+            }
+            break;
+        case 5:
+            if (isa < ISA_MIPS3) {
+                if ((reg < 0x20) || (reg >= 0x40) || (reg & 1)) {
+                    posterror("Should be even floating point register", D_10000004[operand_index], 1);
+                }
+            }
+            break;
+        case 6:
+            if (isa >= ISA_MIPS3) {
+                if ((reg < 0x20) || (reg >= 0x40) || (reg & 1)) {
+                    posterror("Should be even floating point register", D_10000004[operand_index], 1);
+                }
+            } else if ((reg < 0x20) || (reg >= 0x40) || (reg & 3)) {
+                posterror("Should be multiple-of-4 floating point register", D_10000004[operand_index], 1);
+            }
+            break;
+        case 9:
+            if ((isa < ISA_MIPS3) && (reg >= 0x20) && (reg & 1)) {
+                posterror("Should be fp double or gp single register", D_10000004[operand_index], 1);
+            }
+            break;
+        case 10:
+            if (isa < ISA_MIPS3) {
+                if (reg & 1) {
+                    posterror("Should be multiple-of-2 register", D_10000004[operand_index], 1);
+                }
+            }
+            break;
+        case 11:
+            if (isa >= ISA_MIPS3) {
+                if (reg & 1) {
+                    posterror("Should be multiple-of-2 register", D_10000004[operand_index], 1);
+                }
+            } else if (reg & 3) {
+                posterror("Should be multiple-of-4 register", D_10000004[operand_index], 1);
+            }
+            break;
+        case 12:
+            if ((reg < 0x40) || (reg >= 0x48)) {
+                posterror("Should be floating point condition code register", D_10000004[operand_index], 1);
+            }
+            break;
     }
 }
 
 static void func_00405178(int arg0, int arg1, int arg2, int arg3, unsigned arg4, int arg5, int arg6) {
     binasm_rec.unk0 = arg0;
-    binasm_rec.unk5_003F = 0x17; //asm_type
+    binasm_rec.unk5_003F = 0x17; // asm_type
     binasm_rec.unk6_03FE = arg1;
     binasm_rec.unk8_FE = arg2;
     binasm_rec.unk8_01FC = arg3;
@@ -385,7 +385,7 @@ static void func_004056DC(char* arg0) {
 
     if (sp24 == 0) {
         sp28 = hash(arg0); // this took a char*, right?
-        sp2C =  alloc_new_sym();
+        sp2C = alloc_new_sym();
 
         sp2C->next = hashtable[sp28];
         sp2C->name = alloc_new_string(arg0);
@@ -443,10 +443,10 @@ static void func_004058F0(int arg0) {
     func_00405178(0, arg0, 0x48, 0x48, 0xD, 0x48, (var_v1 << 0xA) + sp34);
 }
 
-static void func_00405A80(int* arg0, int *arg1) {
+static void func_00405A80(int* arg0, int* arg1) {
     if (Tokench == ':') {
         nexttoken();
-        *arg1 = GetExpr(); //pain
+        *arg1 = GetExpr(); // pain
         return;
     }
     if ((Tokench == '+') || (Tokench == '-')) {
@@ -458,7 +458,7 @@ static void func_00405A80(int* arg0, int *arg1) {
     }
 }
 
-static void func_00405B54(unsigned int *arg0, unsigned int *arg1, int *arg2) {
+static void func_00405B54(unsigned int* arg0, unsigned int* arg1, int* arg2) {
     if (Tokench == ':') {
         nexttoken();
         *arg2 = GetExpr();
@@ -550,16 +550,16 @@ static void func_00406034(void) {
         func_00405574(2);
     }
 
-    while(1) {
-    sp4C = 0;
-    sp48 = 0;
-    sp50 = 1;
-    sp54 = 0;
-    if (func_00405DE4(&sp54, &sp4C, &sp48, &sp50) == 0) {
-         break;
-    }
+    while (1) {
+        sp4C = 0;
+        sp48 = 0;
+        sp50 = 1;
+        sp54 = 0;
+        if (func_00405DE4(&sp54, &sp4C, &sp48, &sp50) == 0) {
+            break;
+        }
         if (isStruct != 0) {
-          //  temp_t9 = sp50 * 4;
+            //  temp_t9 = sp50 * 4;
             if (sp50 * 4 < 4) {
                 var_v1 = 4;
             } else {
@@ -579,7 +579,7 @@ static void func_00406034(void) {
             put_binasmfyle();
         }
         if (Tokench == '#') {
-                break;
+            break;
         }
     }
 }
@@ -592,7 +592,7 @@ static void func_004061F8(int arg0) {
     sp3C = GetRegister();
     if (sp3C != NULL) {
         if (Tokench == '"') {
-            func_00405C28(&Tstring[0], strlen(&Tstring[0]), &sp38, &sp34); //TODO: warning !!
+            func_00405C28(&Tstring[0], strlen(&Tstring[0]), &sp38, &sp34); // TODO: warning !!
         } else {
             dw_GetExpr(&sp38, &sp34);
         }
@@ -697,16 +697,12 @@ static void func_00406728(int arg0) {
         }
         if (sp44->unk10 == 4) {
             sp44 = NULL;
-        } else
-        if (sp44->unk10 == 3) {
+        } else if (sp44->unk10 == 3) {
             nexttoken();
             if (Tokench == ',') {
                 func_00406684();
             }
-            if ((Tokench != '+')
-                && (Tokench != '-')
-                && (Tokench != '(')
-                && (Tokench != '#')) {
+            if ((Tokench != '+') && (Tokench != '-') && (Tokench != '(') && (Tokench != '#')) {
                 posterror("invalid external expression", NULL, 1);
                 return;
             }
@@ -715,14 +711,9 @@ static void func_00406728(int arg0) {
     if (Tokench == '%') {
         func_00406340(&sp44, (unsigned int*)&sp4C);
     }
-    if (((Tokench == 'i')
-        || (Tokench == 'd')
-        || (Tokench == 'h')
-        || (Tokench == '+')
-        || (Tokench == '-')
-        || (Tokench == '~')
-        || (Tokench == '"')
-        || (Tokench == '(')) && (GetBaseOrExpr(&sp50, (int*)&sp4C), (sp50 == NULL)) && (Tokench == '(')) {
+    if (((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-') ||
+         (Tokench == '~') || (Tokench == '"') || (Tokench == '(')) &&
+        (GetBaseOrExpr(&sp50, (int*)&sp4C), (sp50 == NULL)) && (Tokench == '(')) {
         nexttoken();
         if ((sp50 = GetRegister()) == NULL) {
             return;
@@ -743,7 +734,7 @@ static void func_00406728(int arg0) {
     }
     if (sp44 != NULL) {
         if (list_extsyms != 0) {
-            func_004054E8(sp44->unk18, Tstring); //TODO: Check if matches
+            func_004054E8(sp44->unk18, Tstring); // TODO: Check if matches
         }
         if (sp50 == NULL) {
             func_00405178(sp44->unk18, arg0, sp40, 0x48, 1, 0x48, sp4C);
@@ -784,24 +775,15 @@ static void func_00406C48(int arg0) {
             sp3C = NULL;
         } else if (sp3C->unk10 == 3) {
             nexttoken();
-            if ((Tokench != '+')
-                && (Tokench != '-')
-                && (Tokench != '(')
-                && (Tokench != '#')) {
+            if ((Tokench != '+') && (Tokench != '-') && (Tokench != '(') && (Tokench != '#')) {
                 posterror("invalid external expression", NULL, 1);
                 return;
             }
         }
     }
-    if ((Tokench == 'i')
-        || (Tokench == 'd')
-        || (Tokench == 'h')
-        || (Tokench == '+')
-        || (Tokench == '-')
-        || (Tokench == '~')
-        || (Tokench == '"')
-        || (Tokench == '(')) {
-            GetBaseOrExpr(&sp48, &sp40);
+    if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-') ||
+        (Tokench == '~') || (Tokench == '"') || (Tokench == '(')) {
+        GetBaseOrExpr(&sp48, &sp40);
         if ((sp48 == NULL) && (Tokench == '(')) {
             nexttoken();
             if ((sp48 = GetRegister()) == NULL) {
@@ -850,26 +832,17 @@ static void func_00406FE8(int arg0) {
 
         if (sp34->unk10 == 4) {
             sp34 = NULL;
-        } else if ( sp34->unk10 == 3) {
+        } else if (sp34->unk10 == 3) {
             nexttoken();
-            if ((Tokench != '+')
-                && (Tokench != '-')
-                && (Tokench != '(')
-                && (Tokench != '#')) {
+            if ((Tokench != '+') && (Tokench != '-') && (Tokench != '(') && (Tokench != '#')) {
                 posterror("invalid external expression", NULL, 1);
                 return;
             }
         }
     }
 
-    if ((Tokench != 'i')
-        && (Tokench != 'd')
-        && (Tokench != 'h')
-        && (Tokench != '+')
-        && (Tokench != '-')
-        && (Tokench != '~')
-        && (Tokench != '"')
-        && (Tokench != '(')) {
+    if ((Tokench != 'i') && (Tokench != 'd') && (Tokench != 'h') && (Tokench != '+') && (Tokench != '-') &&
+        (Tokench != '~') && (Tokench != '"') && (Tokench != '(')) {
         GetBaseOrExpr(&sp3C, &sp38);
         if ((sp3C == NULL) && (Tokench == '(')) {
             nexttoken();
@@ -926,7 +899,6 @@ static void func_00407334(void) {
     temp_s6 = Tstringlength;
     strcpy(sp50, Tstring);
     nexttoken();
-
 
     if (binasm_rec.unk5_003F == 0x17) {
         func_00405178(0, binasm_rec.unk6_03FE, binasm_rec.unk8_FE, 0x48, 2, 0x48, var_s5 + temp_s6);
@@ -1010,7 +982,7 @@ static void func_004076A0(int fasm) {
         }
         if (Tokench == '%') {
             func_00406340(&sp44, &sp40);
-        } else if (isa < 3) {
+        } else if (isa < ISA_MIPS3) {
             sp40 = GetExpr();
         } else if (dw_GetExpr(&sp38, &sp34)) {
             if (fasm == zlui) {
@@ -1041,7 +1013,6 @@ static void func_004076A0(int fasm) {
             var_a0 = 0;
         }
 
-
         if ((fasm == zlui) && (sp30 != NULL)) {
             func_00405178(var_a0, fasm, sp48, sp30->reg, 4, 0x48, sp40);
         } else {
@@ -1057,11 +1028,11 @@ static void func_00407A20(asmcodes asm_code) {
     sym* sp54;
     sym* sp50;
     sym* sp4C;
-    int has_immed; // sp+48
-    int immed_lo; // sp+44
-    int immed_hi; // sp+40
+    int has_immed;     // sp+48
+    int immed_lo;      // sp+44
+    int immed_hi;      // sp+40
     int outside_int32; // sp+3C
-    int temp_atflag; // sp+38
+    int temp_atflag;   // sp+38
 
     immed_lo = 0;
     sp54 = NULL;
@@ -1097,20 +1068,19 @@ static void func_00407A20(asmcodes asm_code) {
             return;
         }
 
-        if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h')
-            || (Tokench == '+') || (Tokench == '-') || (Tokench == '~')
-            || (Tokench == '"') || (Tokench == '(')) {
-            if (isa <= 2) {
+        if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-') ||
+            (Tokench == '~') || (Tokench == '"') || (Tokench == '(')) {
+            if (isa <= ISA_MIPS2) {
                 immed_lo = GetExpr();
             } else {
-                outside_int32 = dw_GetExpr((unsigned int *)&immed_hi, (unsigned int *)&immed_lo);
+                outside_int32 = dw_GetExpr((unsigned int*)&immed_hi, (unsigned int*)&immed_lo);
             }
             if (sp54 == NULL) {
                 sp54 = sp5C;
             }
             has_immed = 1;
         } else {
-            if (isa >= 2) {
+            if (isa >= ISA_MIPS2) {
                 switch (asm_code) {
                     case zmovt:
                     case zmovf:
@@ -1259,13 +1229,13 @@ static void func_00407A20(asmcodes asm_code) {
             if (has_immed) {
                 posterror("immed operand not allowed on fp ", NULL, 1);
             }
-        break;
+            break;
     }
 
     if (has_immed) {
         temp_atflag = atflag;
         if (outside_int32) {
-            switch (asm_code){
+            switch (asm_code) {
                 case zadd:
                 case zaddu:
                 case zdiv:
@@ -1337,7 +1307,6 @@ static void func_004085D8(int arg0) {
     sym* reg2; // sp38
     sym* reg3; // sp34
     sym* reg4;
-
 
     if ((reg1 = GetRegister()) == NULL) {
         return;
@@ -1422,10 +1391,8 @@ static void func_004088B8(int arg0) {
         }
     }
 
-    if ((Tokench == 'i') || (Tokench == 'd')
-        || (Tokench == 'h') || (Tokench == '+')
-        || (Tokench == '-') || (Tokench == '~')
-        || (Tokench == '"') || (Tokench == '(')) {
+    if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-') ||
+        (Tokench == '~') || (Tokench == '"') || (Tokench == '(')) {
         if (isa <= ISA_MIPS2) {
             sp38 = 0;
             sp40 = GetExpr();
@@ -1638,11 +1605,7 @@ static void func_004092FC(int arg0) {
         }
     }
     if (sp58 == NULL) {
-        if  ((Tokench == 'i')
-            || (Tokench == 'd')
-            || (Tokench == 'h')
-            || (Tokench == '+')
-            || (Tokench == '-')) {
+        if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-')) {
             if (isa < 3) {
                 sp40 = 0;
                 sp48 = GetExpr();
@@ -1715,14 +1678,13 @@ static void func_00409850(int arg0) {
     struct sym* sp34;
     int sp30;
 
-
     if (arg0 == zbal) {
         sp3C = reg_ptr[0];
     } else {
         if ((sp3C = GetRegister()) == NULL) {
             return;
         }
-        if (((arg0 == 0xE5) || (arg0 == 0x120) || (arg0 == 0xE4) || (arg0 == 0x124)) && (sp3C == reg_ptr[0x20-1])) {
+        if (((arg0 == 0xE5) || (arg0 == 0x120) || (arg0 == 0xE4) || (arg0 == 0x124)) && (sp3C == reg_ptr[0x20 - 1])) {
             posterror("$31 not allowed in conditional branch and link", NULL, 2);
         }
     }
@@ -1788,7 +1750,7 @@ static void func_00409B10(int arg0) {
         return;
     }
     if (func_00409118(&sp38) != 0) {
-        binasm_rec.unkA_3FFF  = sp38;
+        binasm_rec.unkA_3FFF = sp38;
         if (sp40) {
             func_00405178(0, arg0, sp3C, 0x48, 9, 0x48, 0);
         } else {
@@ -1825,11 +1787,7 @@ static void func_00409B10(int arg0) {
 static void func_00409ECC(int arg0) {
     unsigned int temp_v0;
 
-    if ((Tokench == 'i')
-        || (Tokench == 'd')
-        || (Tokench == 'h')
-        || (Tokench == '+')
-        || (Tokench == '-')) {
+    if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-')) {
         temp_v0 = GetExpr();
     } else {
         posterror("expression required", NULL, 1);
@@ -1907,10 +1865,8 @@ static void func_0040A280(void) {
     if ((sp34 = GetRegister()) == NULL) {
         return;
     }
-    if ((Tokench == 'i') || (Tokench == 'd') ||
-        (Tokench == 'h') || (Tokench == '+') ||
-        (Tokench == '-') || (Tokench == '~') ||
-        (Tokench == '(')) {
+    if ((Tokench == 'i') || (Tokench == 'd') || (Tokench == 'h') || (Tokench == '+') || (Tokench == '-') ||
+        (Tokench == '~') || (Tokench == '(')) {
         sp2C = GetExpr();
     } else {
         posterror("expression required", NULL, 1);
@@ -1921,7 +1877,7 @@ static void func_0040A280(void) {
             return;
         }
     } else {
-        sp30 = reg_ptr[0x20-1];
+        sp30 = reg_ptr[0x20 - 1];
     }
     if (!LookUp(sframereg, &sp28)) {
         posterror("can not find symbol", sframereg, 1);
@@ -1952,12 +1908,11 @@ static void func_0040A4B0(void) {
 static void func_0040A530(void) {
     int var_v1;
 
-    if ((var_v1 =  GetExpr()) != 1) {
+    if ((var_v1 = GetExpr()) != 1) {
         posterror(".shift_addr expression not 1", NULL, 1);
-
     }
     binasm_rec.unk0 = 0;
-    binasm_rec.unk5_003F =  0x39;
+    binasm_rec.unk5_003F = 0x39;
     binasm_rec.unk8 = var_v1;
     put_binasmfyle();
     shftaddr = 1;
@@ -2097,19 +2052,19 @@ static void func_0040AAD4(int arg0) {
     binasm_rec.unk8 = sp2C;
     binasm_rec.unkC = sp28;
     put_binasmfyle();
-    switch (arg0) {                         /* irregular */
-    case icomm:
-        sp30 = 0x11;
-        break;
-    case ilcomm:
-        sp30 = 0x21;
-        break;
-    case iextern:
-        sp30 = 0x22;
-        break;
-    default:
-        assertion_failed("false", "as0parse.c", 0xA08);
-        break;
+    switch (arg0) { /* irregular */
+        case icomm:
+            sp30 = 0x11;
+            break;
+        case ilcomm:
+            sp30 = 0x21;
+            break;
+        case iextern:
+            sp30 = 0x22;
+            break;
+        default:
+            assertion_failed("false", "as0parse.c", 0xA08);
+            break;
     }
     sym_define(sp34->unk18, sp30, sp2C);
 }
@@ -2227,29 +2182,29 @@ int do_dot_end(int arg0) {
     if ((arg0 == 0) && (D_10000014 == NULL)) {
         posterror(".end without .ent", NULL, 2);
     } else {
-    if ((arg0 != 0) && (D_10000014 != NULL)) {
-        posterror("missing .end at end of assembly", NULL, 2);
-    }
-     while (D_10000014 != NULL) {
-        if (sym_undefined(D_10000014[0]) != 0) {
-            posterror(".ent/.end block never defined the procedure name", NULL, 2);
-        } else {
-            binasm_rec.unk0 = st_procend(D_10000014[0]);
+        if ((arg0 != 0) && (D_10000014 != NULL)) {
+            posterror("missing .end at end of assembly", NULL, 2);
         }
-        temp_s0 = D_10000014[1];
-        free(D_10000014);
-        D_10000014 = temp_s0;
-        binasm_rec.unk5_003F = 0x18;
-        put_binasmfyle();
+        while (D_10000014 != NULL) {
+            if (sym_undefined(D_10000014[0]) != 0) {
+                posterror(".ent/.end block never defined the procedure name", NULL, 2);
+            } else {
+                binasm_rec.unk0 = st_procend(D_10000014[0]);
+            }
+            temp_s0 = D_10000014[1];
+            free(D_10000014);
+            D_10000014 = temp_s0;
+            binasm_rec.unk5_003F = 0x18;
+            put_binasmfyle();
+        }
     }
-  }
 }
 
 static void func_0040B554(int arg0) {
     int* sp24;
 
     sp24 = D_10000014;
-    D_10000014 =  malloc(sizeof(long long));
+    D_10000014 = malloc(sizeof(long long));
     if (D_10000014 == NULL) {
         new_error();
         return;
@@ -2268,8 +2223,8 @@ static void func_0040B5F0(int arg0) {
     isStruct = 0;
 
     if ((Tokench != 'i') && (arg0 != 0x18)) {
-            posterror("identifer expected", NULL, 1);
-            return;
+        posterror("identifer expected", NULL, 1);
+        return;
     }
     if ((arg0 == zbreak) || (arg0 == zpref)) {
         if (verbose != 0) {
@@ -2330,7 +2285,7 @@ static int func_0040B984(void) {
                 if (list_extsyms != 0) {
                     func_004054E8(cur_symbol->unk18, &Tstring[0]);
                 }
-                binasm_rec.unk0 =  cur_symbol->unk18;
+                binasm_rec.unk0 = cur_symbol->unk18;
                 binasm_rec.unk5_003F = 2;
 
                 put_binasmfyle();
@@ -2348,19 +2303,19 @@ static int func_0040B984(void) {
             if (opLookUp(&Tstring[0], &cur_symbol) == 0) {
                 posterror("bad section name\0bad section name", NULL, 1);
             } else if (cur_symbol->unk10 == 2) {
-                switch (cur_symbol->reg) {                /* irregular */
-                case 21:
-                    sym_define(sp38, '#', 0);
-                    break;
-                case 10:
-                    sym_define(sp38, 2, 0);
-                    break;
-                case 25:
-                    sym_define(sp38, 0xD, 0);
-                    break;
-                case 26:
-                    sym_define(sp38, 0xF, 0);
-                    break;
+                switch (cur_symbol->reg) { /* irregular */
+                    case 21:
+                        sym_define(sp38, '#', 0);
+                        break;
+                    case 10:
+                        sym_define(sp38, 2, 0);
+                        break;
+                    case 25:
+                        sym_define(sp38, 0xD, 0);
+                        break;
+                    case 26:
+                        sym_define(sp38, 0xF, 0);
+                        break;
                 }
             }
             nexttoken();
@@ -2407,9 +2362,8 @@ static void func_0040BC84(void) {
     } while (Tokench == ',');
 }
 
-static int func_0040BEBC(int* arg0, int *arg1, int *arg2) {
+static int func_0040BEBC(int* arg0, int* arg1, int* arg2) {
     struct sym* sp24;
-
 
     if (Tokench == 'i') {
         if (LookUp(&Tstring[0], &sp24) == 0) {
@@ -2427,7 +2381,7 @@ static int func_0040BEBC(int* arg0, int *arg1, int *arg2) {
 
             if (Tokench == 0x2C) {
                 nexttoken();
-               return 1;
+                return 1;
             }
         } else {
             posterror("Bad id in expression", &Tstring[0], 1);
@@ -2439,7 +2393,6 @@ static int func_0040BEBC(int* arg0, int *arg1, int *arg2) {
     }
     return 1;
 }
-
 
 static void func_0040C048(void) {
     int sp54;
@@ -2478,7 +2431,7 @@ static void func_0040C048(void) {
             binasm_rec.unkC = sp50;
             put_binasmfyle();
         }
-    } while(Tokench != '#');
+    } while (Tokench != '#');
     shftaddr = 0;
 }
 
@@ -2561,7 +2514,7 @@ static void func_0040C5E8(int arg0) {
     binasm_rec.unkC = GetExpr();
     put_binasmfyle();
 }
-//parse_repeat
+// parse_repeat
 static void parse_repeat(int arg0, int arg1) {
     unsigned int var_s5;
     unsigned int var_s0;
@@ -2623,7 +2576,7 @@ static void func_0040C928(void) {
         binasm_rec.unk8_FE = sp24->reg;
     }
 }
-//func_0040C9D0
+// func_0040C9D0
 static void parse_option(void) {
     int opt;
     char* opt_name;
@@ -2640,7 +2593,7 @@ static void parse_option(void) {
     opt = which_opt(opt_name);
     free(opt_name);
     nexttoken();
-    switch (opt) {                                 /* irregular */
+    switch (opt) {
         case 0x7:
             binasm_rec.unk6_C0 = 1;
             binasm_rec.unkC = 0;
@@ -2692,34 +2645,34 @@ static int func_0040CC44(char* name) {
 
     var_s1 = sset_value;
 
-    for (var_s0 = 0; var_s0 <= 0x10 ; var_s0++) {
-    if (strcmp(name, *var_s1) == 0) {
-        return var_s0;
+    for (var_s0 = 0; var_s0 <= 0x10; var_s0++) {
+        if (strcmp(name, *var_s1) == 0) {
+            return var_s0;
         }
         var_s1++;
     }
     return 0;
 }
 
-//func_0040CCCC
+// func_0040CCCC
 static void parse_set(void) {
     binasm_rec.unk0 = 0;
-    binasm_rec.unk5_003F = iset; //asmtype
+    binasm_rec.unk5_003F = iset; // asmtype
 
     if (Tokench != 'i') {
         posterror(".set option expected", NULL, 2);
     } else {
         binasm_rec.unk8 = func_0040CC44(&Tstring[0]);
-        switch (binasm_rec.unk8) {                          /* irregular */
-        case 5:
-            atflag = 1;
-            break;
-        case 6:
-            atflag = 0;
-            break;
-        case 0:
-            posterror("unknown option in .set", &Tstring[0], 2);
-            break;
+        switch (binasm_rec.unk8) { /* irregular */
+            case 5:
+                atflag = 1;
+                break;
+            case 6:
+                atflag = 0;
+                break;
+            case 0:
+                posterror("unknown option in .set", &Tstring[0], 2);
+                break;
         }
         nexttoken();
     }
@@ -2774,7 +2727,7 @@ static void func_0040CF9C(void) {
     if (LastLabel != 0) {
         func_00405574(2);
     }
-    while(1) {
+    while (1) {
         sp4C = 0;
         sp50 = 1;
         sp54 = 0;
@@ -2814,12 +2767,12 @@ static void func_0040D110(void) {
         func_00405574(2);
     }
 
-    while(1) {
+    while (1) {
         sp4C = 0;
         sp50 = 1;
         sp54 = 0;
         if (func_0040BEBC(&sp54, &sp4C, &sp50) == 0) {
-                break;
+            break;
         }
         if (isStruct != 0) {
             temp_t9 = sp50 * 4;
@@ -2831,16 +2784,15 @@ static void func_0040D110(void) {
             StructOrg += var_v1;
         } else {
             binasm_rec.unk0 = sp54;
-            binasm_rec.unk5_003F =  0x10; //Fake?
+            binasm_rec.unk5_003F = 0x10; // Fake?
             binasm_rec.unk8 = sp4C;
             binasm_rec.unkC = sp50;
             put_binasmfyle();
         }
         if (Tokench == 0x23) {
             break;
-
-            }
         }
+    }
 }
 
 static void func_0040D284(char* arg0) {
@@ -2856,7 +2808,7 @@ static void func_0040D284(char* arg0) {
     }
     sym_define(cur_symbol->unk18, CurrentSegment, 0);
 
-    binasm_rec.unk0 =   cur_symbol->unk18;
+    binasm_rec.unk0 = cur_symbol->unk18;
     binasm_rec.unk5_003F = ~0x3F;
 
     if (list_extsyms != 0) {
@@ -2925,176 +2877,176 @@ void Parsestmt(void) {
         posterror("undefined assembler operation", sp38, 1);
         return;
     }
-        /* Parse different asm directives */
+    /* Parse different asm directives */
     if (cur_symbol->unk10 == 2) {
         int temp_a0 = cur_symbol->reg;
-        switch (temp_a0) {          /* switch 1 */
-        case idata:                   /* switch 1 */
-        case itext:                  /* switch 1 */
-        case isdata:                  /* switch 1 */
-        case irdata:                  /* switch 1 */
-            func_0040AF00(temp_a0);
-            break;
-        case ialign:                   /* switch 1 */
-            func_0040A5D4();
-            break;
-        case iascii:                   /* switch 1 */
-            func_0040A79C(0);
-            break;
-        case iasciiz:                   /* switch 1 */
-            func_0040A79C(1);
-            break;
-        case ibyte:                   /* switch 1 */
-            func_0040A958();
-            break;
-        case icomm:                   /* switch 1 */
-            func_0040AAD4(8);
-            break;
-        case ifloat:                   /* switch 1 */
-            func_0040B0F4(1);
-            break;
-        case idouble:                   /* switch 1 */
-            func_0040B0F4(2);
-            break;
-        case iextended:                  /* switch 1 */
-            func_0040B0F4(4);
-            break;
-        case iglobal:                   /* switch 1 */
-            func_0040B984();
-            break;
-        case iweakext:                  /* switch 1 */
-            func_0040BC84();
-            break;
-        case ihalf:                   /* switch 1 */
-            func_0040C048();
-            break;
-        case ilcomm:                   /* switch 1 */
-            func_0040AAD4(9);
-            break;
-        case iextern:                  /* switch 1 */
-            func_0040AAD4(iextern);
-            break;
-        case ioption:                  /* switch 1 */
-            parse_option();
-            break;
-        case iset:                  /* switch 1 */
-            parse_set();
-            break;
-        case ispace:                  /* switch 1 */
-            func_0040CEB4();
-            break;
-        case iword:                  /* switch 1 */
-            func_0040CF9C();
-            break;
-        case idword:                  /* switch 1 */
-            func_00406034();
-            break;
-        case iend:                  /* switch 1 */
-        case ient:                  /* switch 1 */
-        case iaent:                  /* switch 1 */
-            func_0040B5F0(temp_a0);
-            break;
-        case ibgnb:                  /* switch 1 */
-        case iendb:                  /* switch 1 */
-        case ilab:                  /* switch 1 */
-            func_0040C830(temp_a0);
-            break;
-        case iloc:                  /* switch 1 */
-            func_0040C218();
-            break;
-        case ivreg:                  /* switch 1 */
-            func_0040C928();
-            break;
-        case irep:                  /* switch 1 */
-            parse_repeat(1, GetExpr());
-            break;
-        case iendrep:                  /* switch 1 */
-            parse_repeat(0, 0);
-            break;
-        case ierr:                  /* switch 1 */
-            posterror(".err directive encountered", NULL, 1);
-            break;
-        case isym:                   /* switch 1 */
-            func_0040ADFC();
-            break;
-        case imask:                  /* switch 1 */
-            func_0040C5E8(imask);
-            break;
-        case ifmask:                  /* switch 1 */
-            func_0040C5E8(ifmask);
-            break;
-        case istruct:                  /* switch 1 */
-            func_0040A4B0();
-            break;
-        case iframe:                  /* switch 1 */
-            func_0040A280();
-            break;
-        case '*':                  /* switch 1 */
-            func_0040A208();
-            break;
-        case ifile:                   /* switch 1 */
-            func_0040B340();
-            break;
-        case imtag:                  /* switch 1 */
-            func_0040C360();
-            break;
-        case imalias:                  /* switch 1 */
-            func_0040C3E0();
-            break;
-        case iloopno:                  /* switch 1 */
-            func_0040C2E0();
-            break;
-        case inoalias:                  /* switch 1 */
-            func_0040CDE4(inoalias);
-            break;
-        case ialias:                  /* switch 1 */
-            func_0040CDE4(ialias);
-            break;
-        case ilivereg:                  /* switch 1 */
-        case igjaldef:                  /* switch 1 */
-        case igjallive:                  /* switch 1 */
-        case igjrlive:                  /* switch 1 */
-            func_0040C5E8(temp_a0);
-            break;
-        case ishift_addr:                  /* switch 1 */
-            if (mednat) {
-                func_0040A530();
-            } else {
-                assertion_failed("false", "as0parse.c", 3537);
-            }
-            break;
-        case irestext:                  /* switch 1 */
-            if (mednat) {
-                binasm_rec.unk5_003F = 0x3A;
-                put_binasmfyle();
-            } else {
-                assertion_failed("false", "as0parse.c", 3545);
-            }
-            break;
-        case iprologue:                  /* switch 1 */
-            func_0040C460();
-            break;
-        case iedata:                  /* switch 1 */
-            func_0040C4CC();
-            break;
-        case icpload:                   /* switch 1 */
-            func_0040A044(3);
-            break;
-        case icprestore:                   /* switch 1 */
-            func_0040A0D4();
-            break;
-        case icpadd:                  /* switch 1 */
-            func_0040A044(0x11);
-            break;
-        case igpword:                  /* switch 1 */
-            func_0040D110();
-            break;
-        case icpalias:                  /* switch 1 */
-            parse_cpalias();
-            break;
-        default:                    /* switch 1 */
-            assertion_failed("false", "as0parse.c", 3569);
-            break;
+        switch (temp_a0) {
+            case idata:
+            case itext:
+            case isdata:
+            case irdata:
+                func_0040AF00(temp_a0);
+                break;
+            case ialign:
+                func_0040A5D4();
+                break;
+            case iascii:
+                func_0040A79C(0);
+                break;
+            case iasciiz:
+                func_0040A79C(1);
+                break;
+            case ibyte:
+                func_0040A958();
+                break;
+            case icomm:
+                func_0040AAD4(8);
+                break;
+            case ifloat:
+                func_0040B0F4(1);
+                break;
+            case idouble:
+                func_0040B0F4(2);
+                break;
+            case iextended:
+                func_0040B0F4(4);
+                break;
+            case iglobal:
+                func_0040B984();
+                break;
+            case iweakext:
+                func_0040BC84();
+                break;
+            case ihalf:
+                func_0040C048();
+                break;
+            case ilcomm:
+                func_0040AAD4(9);
+                break;
+            case iextern:
+                func_0040AAD4(iextern);
+                break;
+            case ioption:
+                parse_option();
+                break;
+            case iset:
+                parse_set();
+                break;
+            case ispace:
+                func_0040CEB4();
+                break;
+            case iword:
+                func_0040CF9C();
+                break;
+            case idword:
+                func_00406034();
+                break;
+            case iend:
+            case ient:
+            case iaent:
+                func_0040B5F0(temp_a0);
+                break;
+            case ibgnb:
+            case iendb:
+            case ilab:
+                func_0040C830(temp_a0);
+                break;
+            case iloc:
+                func_0040C218();
+                break;
+            case ivreg:
+                func_0040C928();
+                break;
+            case irep:
+                parse_repeat(1, GetExpr());
+                break;
+            case iendrep:
+                parse_repeat(0, 0);
+                break;
+            case ierr:
+                posterror(".err directive encountered", NULL, 1);
+                break;
+            case isym:
+                func_0040ADFC();
+                break;
+            case imask:
+                func_0040C5E8(imask);
+                break;
+            case ifmask:
+                func_0040C5E8(ifmask);
+                break;
+            case istruct:
+                func_0040A4B0();
+                break;
+            case iframe:
+                func_0040A280();
+                break;
+            case '*':
+                func_0040A208();
+                break;
+            case ifile:
+                func_0040B340();
+                break;
+            case imtag:
+                func_0040C360();
+                break;
+            case imalias:
+                func_0040C3E0();
+                break;
+            case iloopno:
+                func_0040C2E0();
+                break;
+            case inoalias:
+                func_0040CDE4(inoalias);
+                break;
+            case ialias:
+                func_0040CDE4(ialias);
+                break;
+            case ilivereg:
+            case igjaldef:
+            case igjallive:
+            case igjrlive:
+                func_0040C5E8(temp_a0);
+                break;
+            case ishift_addr:
+                if (mednat) {
+                    func_0040A530();
+                } else {
+                    assertion_failed("false", "as0parse.c", 3537);
+                }
+                break;
+            case irestext:
+                if (mednat) {
+                    binasm_rec.unk5_003F = 0x3A;
+                    put_binasmfyle();
+                } else {
+                    assertion_failed("false", "as0parse.c", 3545);
+                }
+                break;
+            case iprologue:
+                func_0040C460();
+                break;
+            case iedata:
+                func_0040C4CC();
+                break;
+            case icpload:
+                func_0040A044(3);
+                break;
+            case icprestore:
+                func_0040A0D4();
+                break;
+            case icpadd:
+                func_0040A044(0x11);
+                break;
+            case igpword:
+                func_0040D110();
+                break;
+            case icpalias:
+                parse_cpalias();
+                break;
+            default:
+                assertion_failed("false", "as0parse.c", 3569);
+                break;
         }
         if (!printedline && (Tokench != '#')) {
             posterror("stmt extends past logical end", NULL, 1);
@@ -3102,64 +3054,64 @@ void Parsestmt(void) {
     } else if (cur_symbol->unk10 == 1) {
         int temp_a0 = cur_symbol->reg;
 
-        switch (cur_symbol->unk18) {          /* switch 2 */
-        case 0:                     /* switch 2 */
-            func_004058F0(temp_a0);
-            break;
-        case 5:                     /* switch 2 */
-            func_00408C80(temp_a0);
-            break;
-        case 10:                    /* switch 2 */
-            func_00409FD0(temp_a0);
-            break;
-        case 4:                     /* switch 2 */
-            func_0040848C(temp_a0);
-            break;
-        case 3:                     /* switch 2 */
-            func_00407A20(temp_a0);
-            break;
-        case 1:                     /* switch 2 */
-            func_00406728(temp_a0);
-            break;
-        case 12:                    /* switch 2 */
-            func_00406FE8(temp_a0);
-            break;
-        case 2:                     /* switch 2 */
-            func_004076A0(temp_a0);
-            break;
-        case 11:                    /* switch 2 */
-            func_004075CC(temp_a0);
-            break;
-        case 8:                     /* switch 2 */
-            func_00409B10(temp_a0);
-            break;
-        case 7:                     /* switch 2 */
-            func_00409850(temp_a0);
-            break;
-        case 6:                     /* switch 2 */
-            func_004092FC(temp_a0);
-            break;
-        case 9:                     /* switch 2 */
-            func_00409ECC(temp_a0);
-            break;
-        case 13:                    /* switch 2 */
-            func_004088B8(temp_a0);
-            break;
-        case 15:                    /* switch 2 */
-            func_00406C48(temp_a0);
-            break;
-        case 14:                    /* switch 2 */
-            func_004061F8(temp_a0);
-            break;
-        case 16:                    /* switch 2 */
-            func_004085D8(temp_a0);
-            break;
-        case 17:                    /* switch 2 */
-            func_004086EC(temp_a0);
-            break;
-        default:                    /* switch 2 */
-            assertion_failed("false", "as0parse.c", 3632);
-            break;
+        switch (cur_symbol->unk18) {
+            case 0:
+                func_004058F0(temp_a0);
+                break;
+            case 5:
+                func_00408C80(temp_a0);
+                break;
+            case 10:
+                func_00409FD0(temp_a0);
+                break;
+            case 4:
+                func_0040848C(temp_a0);
+                break;
+            case 3:
+                func_00407A20(temp_a0);
+                break;
+            case 1:
+                func_00406728(temp_a0);
+                break;
+            case 12:
+                func_00406FE8(temp_a0);
+                break;
+            case 2:
+                func_004076A0(temp_a0);
+                break;
+            case 11:
+                func_004075CC(temp_a0);
+                break;
+            case 8:
+                func_00409B10(temp_a0);
+                break;
+            case 7:
+                func_00409850(temp_a0);
+                break;
+            case 6:
+                func_004092FC(temp_a0);
+                break;
+            case 9:
+                func_00409ECC(temp_a0);
+                break;
+            case 13:
+                func_004088B8(temp_a0);
+                break;
+            case 15:
+                func_00406C48(temp_a0);
+                break;
+            case 14:
+                func_004061F8(temp_a0);
+                break;
+            case 16:
+                func_004085D8(temp_a0);
+                break;
+            case 17:
+                func_004086EC(temp_a0);
+                break;
+            default:
+                assertion_failed("false", "as0parse.c", 3632);
+                break;
         }
         if (!printedline && (Tokench != '#')) {
             posterror("stmt extends past logical end", NULL, 1);

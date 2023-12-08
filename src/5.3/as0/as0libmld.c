@@ -1,12 +1,12 @@
 /*
-* @file: as0libmld.c
-* @brief: Contains a modified version of some libmld functions.
-*/
+ * @file: as0libmld.c
+ * @brief: Contains a modified version of some libmld functions.
+ */
 #include "stdio.h"
 #include "stdlib.h"
 #include "sys/stat.h"
 
-//External declaration
+// External declaration
 extern void call_name_and_line(int arg0);
 
 int filesize(FILE** arg0);
@@ -19,8 +19,8 @@ void st_internal(char* arg0, int arg1, int arg2, int arg3, int arg4);
 int l_addr(int arg0);
 int e_addr(int arg0);
 int s_addr(int arg0);
-
-//UNUSED
+//
+// UNUSED
 int filesize(FILE** arg0) {
     struct stat buf;
     FILE* temp_v0;
@@ -33,7 +33,7 @@ int filesize(FILE** arg0) {
             }
         }
     }
-    return -1; //End of file
+    return -1; // End of file
 }
 
 void ltoa(int arg0, char* arg1) {
@@ -82,4 +82,3 @@ int e_addr(int arg0) {
 int s_addr(int arg0) {
     return arg0;
 }
-
