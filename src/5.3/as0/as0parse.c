@@ -43,9 +43,9 @@ extern int printedline;
 extern unsigned int rep_count;
 extern binasm_r binasm_rec;
 extern int isStruct;
-// File declarations
-//.data
 
+//as0parse.c
+//.data
 static char* D_10000004[4] = { "", "operand 1", "operand 2", "operand 3" };
 int gform_extn = 0;
 static int* D_10000014 = NULL;
@@ -53,7 +53,7 @@ static int* D_10000014 = NULL;
 //.bss
 /* 029800 1000A800 */ int freg4;
 
-// External function call
+//External declarations
 extern int LookUp(char*, sym**);
 extern void posterror(char* error, char* reg, int file_line);
 extern void assertion_failed(const char* assertion, const char* file, int file_line);
@@ -82,7 +82,7 @@ extern void make_local_label(char* name, size_t* out_len);
 extern int opLookUp(char* name, struct sym** arg1);
 extern void call_name_and_line(int arg0);
 
-// In file declaration (Static)
+// Function declaration (as0parse.c)
 static void func_00404B80(int operand_index, int reg, int asm_index);
 static void func_00405178(int arg0, int arg1, int arg2, int arg3, unsigned arg4, int arg5, int arg6);
 static void func_004054E8(int arg0, char* arg1);
@@ -174,7 +174,7 @@ static void func_00404B80(int operand_index, int reg, int asm_index) {
             var_v0 = asm_info[asm_index].unk4 << 0x16 >> 0x1B;
             break;
         case 3:
-            var_v0 = asm_info[asm_index].unk4 & 0x2F;
+            var_v0 = asm_info[asm_index].unk4 & 0x1F;
             break;
     }
     switch (var_v0) {
@@ -277,7 +277,6 @@ static void func_00405178(int arg0, int arg1, int arg2, int arg3, unsigned arg4,
         case 15:
             binasm_rec.unkB_007F = freg4;
             func_00404B80(3, freg4, arg1);
-            /* fallthrough */
         case 3:
             binasm_rec.unkA_3F80 = arg5;
             func_00404B80(1, arg2, arg1);
@@ -384,7 +383,7 @@ static void func_004056DC(char* arg0) {
     int sp24 = LookUp(arg0, &sp2C);
 
     if (sp24 == 0) {
-        sp28 = hash(arg0); // this took a char*, right?
+        sp28 = hash(arg0);
         sp2C = alloc_new_sym();
 
         sp2C->next = hashtable[sp28];
@@ -546,7 +545,7 @@ static void func_00406034(void) {
     unsigned int sp48;
     int var_v1;
 
-    if (LastLabel != 0) {
+    if (LastLabel != NULL) {
         func_00405574(2);
     }
 
@@ -1739,7 +1738,7 @@ static void func_00409B10(int arg0) {
         sp3C = 0x40;
         if ((LookUp(Tstring, &sp44)) && (sp44->unk10 == 0)) {
             nexttoken();
-            if (Tokench == 0x2C) {
+            if (Tokench == ',') {
                 nexttoken();
             }
             sp3C = sp44->reg;
@@ -2379,7 +2378,7 @@ static int func_0040BEBC(int* arg0, int* arg1, int* arg2) {
             nexttoken();
             func_00405A80(arg1, arg2);
 
-            if (Tokench == 0x2C) {
+            if (Tokench == ',') {
                 nexttoken();
                 return 1;
             }
@@ -2704,7 +2703,6 @@ static void func_0040CEB4(void) {
         func_00405574(0);
     }
     temp_v0 = GetExpr();
-    // temp_v1 = temp_v0;
     if (isStruct != 0) {
         var_v1 = (temp_v0 < 0) ? 0 : temp_v0;
         StructOrg = var_v1 + StructOrg;
@@ -2750,7 +2748,7 @@ static void func_0040CF9C(void) {
             binasm_rec.unkC = sp50;
             put_binasmfyle();
         }
-        if (Tokench == 0x23) {
+        if (Tokench == '#') {
             break;
         }
     }
@@ -2789,7 +2787,7 @@ static void func_0040D110(void) {
             binasm_rec.unkC = sp50;
             put_binasmfyle();
         }
-        if (Tokench == 0x23) {
+        if (Tokench == '#') {
             break;
         }
     }
@@ -2803,7 +2801,7 @@ static void func_0040D284(char* arg0) {
     }
 
     if ((cur_symbol->unk10 != 3) && (cur_symbol->unk10 != 4)) {
-        posterror("", arg0, 1);
+        posterror("Reserved name used as label", arg0, 1);
         return;
     }
     sym_define(cur_symbol->unk18, CurrentSegment, 0);
@@ -2981,7 +2979,7 @@ void Parsestmt(void) {
             case iframe:
                 func_0040A280();
                 break;
-            case '*':
+            case iverstamp:
                 func_0040A208();
                 break;
             case ifile:

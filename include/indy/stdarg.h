@@ -12,7 +12,7 @@ extern "C" {
 /* | consent of MIPS.                                               | */
 /* ------------------------------------------------------------------ */
 
-/* #ident "$Revision: 7.9 $" */
+/* #ident "$Revision: 7.8 $" */
 
 /* ANSI C Notes:
  *
@@ -60,7 +60,6 @@ extern "C" {
  *   invoking the va_end macro:
  *		va_end ( vp );
  */
-#include <sgidefs.h>
 #define _INT 0
 #define _FP  1
 #define _STRUCT 2
@@ -77,7 +76,7 @@ typedef char *va_list;
 #if defined(_COMPILER_VERSION) && (_COMPILER_VERSION>=400) /* Ragnarok */
 
 /* Identify the register size: */
-#if (_MIPS_SIM==_MIPS_SIM_NABI32 || _MIPS_SIM==_MIPS_SIM_ABI64)
+#if _MIPS_SZPTR == 64
 # define __VA_REGBYTES	8
   /* Scalar parameters smaller than register size are right-justified
    * for big-endian targets.  Observe that variable FP parameters are
@@ -93,7 +92,7 @@ typedef char *va_list;
 # else /* ! big-endian */
 #   define __VA_PADJUST(mode)	0
 # endif /* ! big-endian */
-#else /* _MIPS_SIM=_MIPS_SIM_ABI32 */
+#else /* _MIPS_SZPTR == 32 */
 # define __VA_REGBYTES	4
   /* For a 32-bit target with sizeof(int) = register size, no
    * right-justification is ever required:

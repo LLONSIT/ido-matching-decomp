@@ -22,7 +22,7 @@ extern char* sregisters[0x49];
 /* 027EBC 10008EBC */ int atflag;
 /* 027EC0 10008EC0 */ int isStruct; // BOOL
 /* 027EC4 10008EC4 */ int StructOrg;
-/* 027EC8 10008EC8 */ int LastLabel;
+/* 027EC8 10008EC8 */ sym* LastLabel;
 /* 027ECC 10008ECC */ int in_repeat_block;
 /* 027ED0 10008ED0 */ unsigned int rep_count;
 /* 027ED4 10008ED4 */ int rep_size;
@@ -196,7 +196,7 @@ static void func_00404234(int argc, char** argv) {
     atflag = 1;
     debugflag = 0;
     isStruct = 0;
-    LastLabel = 0;
+    LastLabel = NULL;
     in_repeat_block = 0;
     invent_locs = 1;
     gp_warn = 0;
