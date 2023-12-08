@@ -6,25 +6,11 @@
 #include "binasm_rec.h"
 #include "cmplrs/binasm.h" //Original binsasm file
 
-char *sset_value[0x11] = {
-    "",
-    "reorder",
-    "noreorder",
-    "macro",
-    "nomacro",
-    "at",
-    "noat",
-    "move",
-    "nomove",
-    "bopt",
-    "nobopt",
-    "volatile",
-    "novolatile",
-    "transform",
-    "notransform",
-    "reposition",
-    "noreposition",
-};
+extern struct {
+    binasm_r* unk0;
+    size_t unk4;
+} rep_buffer;
+
 
 //external declarations
 extern char isa;
@@ -50,18 +36,23 @@ extern int CurrentLine;
 extern int in_repeat_block;
 extern int rep_size;
 extern int mednat;
-
-//file declarations
+extern struct _struct_asm_info_0x8 asm_info[0x1AF];
+extern char* sset_value[0x11];
+extern int StructOrg;
+extern int shftaddr;
+extern int printedline;
+extern unsigned int rep_count;
+extern binasm_r binasm_rec;
+extern int isStruct;
+//File declarations
+//.data
 static char* D_10000004[4] = {"", "operand 1", "operand 2", "operand 3"};
-int freg4;
 int gform_extn = 0;
 static int* D_10000014 = NULL;
-int StructOrg;
-int shftaddr;
-int printedline;
-unsigned int rep_count;
-binasm_r binasm_rec;
-int isStruct;
+
+//.bss
+/* 029800 1000A800 */ int freg4;
+
 
 //External function call
 extern int LookUp(char*, sym**);
@@ -184,7 +175,7 @@ static void func_00404B80(int operand_index, int reg, int asm_index) {
         var_v0 = asm_info[asm_index].unk4 << 0x16 >> 0x1B;
         break;
     case 3:                                         /* switch 1 */
-        var_v0 = asm_info[asm_index].unk4 & 0x1F;
+        var_v0 = asm_info[asm_index].unk4 & 0x2F;
         break;
     }
     switch (var_v0) {
@@ -574,7 +565,7 @@ static void func_00406034(void) {
             } else {
                 var_v1 = sp50 * 4;
             }
-            StructOrg = var_v1 + StructOrg; //lol
+            StructOrg = var_v1 + StructOrg;
         } else {
             binasm_rec.unk0 = sp54;
             binasm_rec.unk5_003F = idword;

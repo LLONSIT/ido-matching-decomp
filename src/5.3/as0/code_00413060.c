@@ -115,7 +115,7 @@ char *opt_strings[0x6D] = {
 #define MAX(a, b) ((a > b) ? a: b)
 #define MIN(a, b) ((a > b) ? b: a)
 
-//global declaration
+//Global declaration
 extern int CurrentLine;
 extern int debugflag;
 extern int severity;
@@ -132,12 +132,14 @@ static int D_10001094 = 0;
 static char* as0_msg[5] = { "Internal", "Error", "Warning", "Info", ""};
 static int D_10001090 = 0;
 
+//Extern declaration
 extern void* xmalloc(unsigned int);
 extern void* xrealloc(void*, unsigned int);
 extern char *st_str_idn(int idn);
 
-void func_00413060(char* arg0, int arg1);
-void func_00413224(char* arg0);
+//Local declaration
+static void func_00413060(char* arg0, int arg1);
+static void func_00413224(char* arg0);
 void call_name_and_line(int arg0);
 void call_perror(int arg0, char* arg1);
 void new_error(void);
@@ -146,9 +148,8 @@ void postcerror(char* error, int arg1);
 void assertion_failed(char *assert_name, char *file, int file_line);
 int which_opt(char* name);
 void* grow_array(size_t* capacity_count, size_t new_count, size_t width, void* ptr, int clear_mem);
-void ltoa(int arg0, char* arg1);
 
-void func_00413060(char* arg0, int arg1) {
+static void func_00413060(char* arg0, int arg1) {
     if (verbose) {
         if (arg1 != 3) {
             if (D_10001094 != 0) {
@@ -159,7 +160,7 @@ void func_00413060(char* arg0, int arg1) {
             return;
         }
     }
-    severity = MIN(severity, arg1);
+    severity = MIN(arg1, severity);
 
     if (arg1 != 3) {
         fprintf(stderr, "%s", "as0: ");
@@ -179,7 +180,7 @@ void func_00413060(char* arg0, int arg1) {
     fprintf(stderr, ", line %1d:", CurrentLine);
 }
 
-void func_00413224(char* arg0) {
+static void func_00413224(char* arg0) {
     if (D_10001090 != 0) {
         *arg0 = 0;
         return;
@@ -293,9 +294,5 @@ void* grow_array(size_t* capacity_count, size_t new_count, size_t width, void* p
         }
     }
     return new_ptr;
-}
-
-void ltoa(int arg0, char* arg1) {
-    sprintf(arg1, "%d", arg0);
 }
 

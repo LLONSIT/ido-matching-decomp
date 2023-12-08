@@ -1,69 +1,71 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "stdio.h"
+#include "stdlib.h"
 #include "asm.h"
+#include "cmplrs/binasm.h" //Original binasm header
 #include "binasm_rec.h" //temp
 
-char *sregisters[0x49] = {
-    "$0",    "$1",    "$2",    "$3",    "$4",    "$5",    "$6",    "$7",
-    "$8",    "$9",    "$10",   "$11",   "$12",   "$13",   "$14",   "$15",
-    "$16",   "$17",   "$18",   "$19",   "$20",   "$21",   "$22",   "$23",
-    "$24",   "$25",   "$26",   "$27",   "$28",   "$29",   "$30",   "$31",
-    "$f0",   "$f1",   "$f2",   "$f3",   "$f4",   "$f5",   "$f6",   "$f7",
-    "$f8",   "$f9",   "$f10",  "$f11",  "$f12",  "$f13",  "$f14",  "$f15",
-    "$f16",  "$f17",  "$f18",  "$f19",  "$f20",  "$f21",  "$f22",  "$f23",
-    "$f24",  "$f25",  "$f26",  "$f27",  "$f28",  "$f29",  "$f30",  "$f31",
-    "$fcc0", "$fcc1", "$fcc2", "$fcc3", "$fcc4", "$fcc5", "$fcc6", "$fcc7",
-    "   ",
-};
+//External data
+extern struct _struct_asm_info_0x8 asm_info[0x1AF];
+extern char* sframereg;
+extern char* sframesize;
+extern char* sitype[0x3F];
+extern char* sregisters[0x49];
 
-char* sitype[0x3F] = {
-    "label",    ".sym",      ".globl",   ".cpload",      ".align",    ".ascii",  ".asciiz",    ".byte",   ".comm",
-    ".lcomm",   ".data",     ".double",  ".file",        ".float",    ".half",   ".cprestore", ".gpword", ".cpadd",
-    ".weakext", ".loopno",   ".space",   ".text",        ".word",     "ocode",   ".end",       ".sdata",  ".rdata",
-    ".ent",     ".loc",      ".bgnb",    ".endb",        ".asm0",     ".set",    ".cpalias",   ".repeat", ".endr",
-    ".lab",     ".vreg",     ".mask",    ".fmask",       ".err",      "globabs", ".verstamp",  ".frame",  ".extended",
-    ".extern",  ".aent",     ".option",  ".noalias",     ".alias",    ".mtag",   ".malias",    ".struct", ".livereg",
-    ".gjaldef", ".gjallive", ".gjrlive", ".ishift_addr", ".irestext", ".dword",  ".prologue",  ".edata",  ".alloc",
-};
-
-//External declaration
-extern int local_label[0x100];
-extern int isStruct;
-extern binasm_r binasm_rec;
-
-//File declaration
-int warnexitflag;
-static char* assembler_file;
-static char* B_1000A7F0;
-static char* B_1000A7F4;
-static char* B_1000A7F8;
-char* sframereg = "$framereg"; //Extern, but declared here
-char* sframesize = "$framesize";//Extern, but declared here
-int CurrentFile;
-int CurrentLine;
-int CurrentSegment;
-int LastLabel;
-int atflag;
-int binasm_count;
-FILE* binasmfyle;
-int debugflag;
-int diag_flag;
-FILE* extsyms_file;
-int gp_warn;
-FILE* in_file;
-int invent_locs;
-char isa;
-int linelength;
-int in_repeat_block;
-int mednat;
-int nowarnflag;
-char *reg_ptr[0x100];
-int severity;
-struct sym* ophashtable[0x100];
-struct sym* hashtable[0x100];
-int verbose;
-int list_extsyms;
-
+//.bss
+/* 027EA0 10008EA0 */ int binasm_count;
+/* 027EA4 10008EA4 */ int nowarnflag;
+/* 027EA8 10008EA8 */ int warnexitflag;
+/* 027EAC 10008EAC */ char isa;
+/* 027EB0 10008EB0 */ int CurrentSegment;
+/* 027EB4 10008EB4 */ int verbose;
+/* 027EB8 10008EB8 */ int debugflag;
+/* 027EBC 10008EBC */ int atflag;
+/* 027EC0 10008EC0 */ int isStruct; //BOOL
+/* 027EC4 10008EC4 */ int StructOrg;
+/* 027EC8 10008EC8 */ int LastLabel;
+/* 027ECC 10008ECC */ int in_repeat_block;
+/* 027ED0 10008ED0 */ unsigned int rep_count;
+/* 027ED4 10008ED4 */ int rep_size;
+/* 027ED8 10008ED8 */ struct {
+                             binasm_r* unk0;
+                            size_t unk4;
+                      } rep_buffer;
+/* 027EE0 10008EE0 */ int invent_locs;
+/* 027EE4 10008EE4 */ int gp_warn;
+/* 027EE8 10008EE8 */ int linelength;
+/* 027EEC 10008EEC */ int nextinline;
+/* 027EF0 10008EF0 */ char* line[0x36C];
+/* 02825C 1000925C */ char B_1000925C[0xB4]; //P a d
+/* 028310 10009310 */ int CurrentFile;
+/* 028310 10009310 */ int CurrentLine;
+/* 028318 10009318 */ struct {
+                            /* 0x000 */ char tokench;                            /* inferred */
+                            /* 0x001 */ char tstring[0x400];
+                            /* 0x404 */ int length;
+                        } save;
+/* 028720 10009720 */ char Tokench;
+/* 028728 10009728 */ char Tstring[0x400];
+/* 028B28 10009B28 */ int Tstringlength;
+/* 028B30 10009B30 */ char* token_tmp[0x400];
+/* 028F30 10009F30 */ int printedline;
+/* 028F34 10009F34 */ int severity;
+/* 028F38 10009F38 */ sym *reg_ptr[0x100];
+/* 028FB8 10009FB8 */ sym* hashtable[0x100];
+/* 0291B8 1000A1B8 */ int LastSym; //UNUSED
+/* 0291C0 1000A1C0 */ sym* ophashtable[0x100];
+/* 0293C0 1000A3C0 */ int local_label[0x100];
+/* 0297C0 1000A7C0 */ binasm_r binasm_rec;
+/* 0297D0 1000A7D0 */ FILE* binasmfyle;
+/* 0297D4 1000A7D4 */ FILE* in_file;
+/* 0297D8 1000A7D8 */ int mednat;
+/* 0297DC 1000A7DC */ int diag_flag;
+/* 0297E0 1000A7E0 */ int shftaddr;
+/* 0297E4 1000A7E4 */ FILE* extsyms_file;
+/* 0297E8 1000A7E8 */ int list_extsyms;
+/* 0297EC 1000A7EC */ static char* assembler_file;
+/* 0297F0 1000A7F0 */ static char* B_1000A7F0;
+/* 0297F4 1000A7F4 */ static char* B_1000A7F4;
+/* 0297F8 1000A7F8 */ static char* B_1000A7F8;
 
 //External function call
 extern void posterror(char*, char*, int);
@@ -82,12 +84,12 @@ extern void do_dot_end(int arg0);
 //Internal function call
 static void func_00403F10(void);
 static void func_00404008(void);
-static int func_00404108(int arg0, char* name, int arg2);
-void func_004041A8(char* arg0, int arg1);
-void func_00404234(int argc, char** argv);
+static sym* func_00404108(int arg0, char* name, int arg2);
+static void func_004041A8(char* arg0, int arg1);
+static void func_00404234(int argc, char** argv);
 
 //func_00403F10
-void func_00403F10(void) {
+static void func_00403F10(void) {
     struct _struct_asm_info* var_s2;
     int operand_hash;
     int index;
@@ -115,7 +117,7 @@ void func_00403F10(void) {
 }
 
 //func_00404008:
-void func_00404008(void) {
+static void func_00404008(void) {
     int directives_hash;
     int index;
     char* asm_directives;
@@ -140,7 +142,7 @@ void func_00404008(void) {
     }
 }
 
-static int func_00404108(int arg0, char* name, int arg2) {
+static sym* func_00404108(int arg0, char* name, int arg2) {
     sym* temp_v0;
     int sp20;
 
@@ -155,9 +157,10 @@ static int func_00404108(int arg0, char* name, int arg2) {
     temp_v0->reg = arg0;
 
     hashtable[sp20] = temp_v0;
+    return temp_v0;
 }
 
-void func_004041A8(char* arg0, int arg1) {
+static void func_004041A8(char* arg0, int arg1) {
     int unused;
     int sp20;
     sym* cur_symbol;
@@ -175,7 +178,7 @@ void func_004041A8(char* arg0, int arg1) {
 }
 
 //func_00404234:
-void func_00404234(int argc, char** argv) {
+static void func_00404234(int argc, char** argv) {
     int j;
     int i;
     int k;
@@ -306,7 +309,6 @@ void func_00404234(int argc, char** argv) {
 
                 case OPTION_mips3:
                     isa = ISA_MIPS3;
-                    printf("%d: \n", isa);
                     break;
 
                 case OPTION_mips4:
@@ -380,10 +382,10 @@ void func_00404234(int argc, char** argv) {
     func_00404108(1, "$at", 1);
     func_00404108(0x1A, "$kt0", 0x1B);
     func_00404108(0x1B, "$kt1", 0x1C);
-    func_00404108(0x1C, "$gp", 0x1D);
-    func_00404108(0x1D, "$sp", 0x1E);
+    func_00404108(xr28, "$gp", 0x1D);
+    func_00404108(xr29, "$sp", 0x1E);
     func_00404108(0x1E, "$fp", 0x1F);
-    func_00404108(0x1D, sframereg, 0x1D);
+    func_00404108(xr29, sframereg, 0x1D);
     func_004041A8(sframesize, 0);
     func_00404008();
     func_00403F10();

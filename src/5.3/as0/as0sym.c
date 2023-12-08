@@ -16,6 +16,21 @@ static int D_10000024 = 0;
 
 extern void postcerror(char* error, int arg1);
 
+
+//local declaration
+static void func_0040E180(char* error, char* arg1, int arg2);
+int sym_undefined(int arg0);
+static void func_0040E230(int arg0, int st, int sc, int arg3, int arg4);
+static void func_0040E3F0(int arg0, int arg1, int arg2, int arg3);
+static void func_0040E554(int arg0, int arg1, int arg2, int arg3, int arg4);
+static char* func_0040E760(size_t arg0);
+void sym_init(int arg0);
+void sym_finish(char* arg0, char* arg1);
+int sym_enter(char* arg0, int arg1);
+int sym_define(int arg0, unsigned int section, int arg2);
+void st_feinit(void);
+void itoa(int arg0, char* arg1);
+
 static void func_0040E180(char* error, char* arg1, int arg2) {
     char dest[0x100];
 
