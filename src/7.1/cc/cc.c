@@ -166,7 +166,8 @@ typedef enum Suffix {
     /* 4 */ SUF_4,     // ?
     /* 5 */ SUF_5,     // ?
     /* 6 */ SUF_6,     // C++
-    /* 7 */ SUF_7      // C
+    /* 7 */ SUF_7,     // C
+    /* 8 */ SUF_8      // Pascal 
 } Suffix;
 
 // Special suffixes
@@ -179,6 +180,7 @@ struct _struct_suffixes_0x8 suffixes[] = {
     { "c++", SUF_6 }, { "cc", SUF_6 },  { "cxx", SUF_6 }, { "C", SUF_6 },
     { "cpp", SUF_6 }, { "CXX", SUF_6 }, { "CPP", SUF_6 }, // C++
     { ".c", SUF_7 },                                      // C
+    {"pas", SUF_8},
     { NULL, 0 },
 };
 
@@ -2028,6 +2030,7 @@ int main(int argc, char** argv) {
                 }
                 break;
 
+            case SUF_8:
             case 'p': /* switch 13 */
                 addstr(&execlist, "-DLANGUAGE_PASCAL");
                 addstr(&execlist, "-D_LANGUAGE_PASCAL");
@@ -2450,6 +2453,7 @@ int main(int argc, char** argv) {
             case 'c': /* switch 17 */
                 goto phase_copt;
 
+            case SUF_8:
             case 'p': /* switch 17 */
                 goto phase_upas;
 
@@ -6618,6 +6622,8 @@ void parse_command(int argc, char** argv) {
                         ansiflag = TRUE;
                         break;
                     }
+
+                    /* Apollo pascal */
                     if ((compiler == COMPILER_2) && (strcmp(argv[var_s0], "-apc") == 0)) {
                         addstr(&upasflags, argv[var_s0]);
                         addstr(&genflags, argv[var_s0]);
@@ -7725,7 +7731,7 @@ void parse_command(int argc, char** argv) {
 
                             outfile = argv[var_s0];
                             var_s1 = getsuf(outfile);
-                            if (((var_s1 == 'c') || (var_s1 == 'p') || (var_s1 == 'f') || (var_s1 == 'F') ||
+                            if (((var_s1 == 'c') || (var_s1 == 'p') || (var_s1 == SUF_8) || (var_s1 == 'f') || (var_s1 == 'F') ||
                                  (var_s1 == 'r') || (var_s1 == 'e') ||
                                  ((compiler == COMPILER_1) &&
                                   ((c_compiler_choice == C_COMPILER_CHOICE_2) ||
@@ -8603,7 +8609,7 @@ void parse_command(int argc, char** argv) {
         if (var_s1 == 'm') {
             var_s1 = 'f';
         }
-        if (var_s1 == 'p') {
+        if (var_s1 == 'p' || var_s1 == SUF_8) {
             haspascal = TRUE;
         }
         if (var_s1 == 'f') {
@@ -8612,7 +8618,7 @@ void parse_command(int argc, char** argv) {
         if (var_s1 == SUF_1) {
             haspl1 = TRUE;
         }
-        if ((var_s1 == 'c') || (var_s1 == 'p') || (var_s1 == 'f') || (var_s1 == 'F') || (var_s1 == 'r') ||
+        if ((var_s1 == 'c') || (var_s1 == 'p' || var_s1 == SUF_8) || (var_s1 == 'f') || (var_s1 == 'F') || (var_s1 == 'r') ||
             (var_s1 == 'e') || (var_s1 == 'B') || (var_s1 == 'U') || (var_s1 == 's') || (var_s1 == 'O') ||
             (var_s1 == 'G') || (var_s1 == 'S') || (var_s1 == 'M') || (var_s1 == 'V') || (var_s1 == 'i') ||
             (var_s1 == SUF_1) || (var_s1 == 'D') || (var_s1 == SUF_3) || (var_s1 == SUF_2) || (var_s1 == 'u') ||

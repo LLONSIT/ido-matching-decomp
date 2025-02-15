@@ -42,8 +42,8 @@ def main():
         objfile_asm_text = f"build/asm/{name}"
 
         # object file sections
-        readelf_c = shell_exec(f"mips-linux-gnu-readelf -S {objfile_c}")
-        readelf_asm = shell_exec(f"mips-linux-gnu-readelf -S {objfile_asm_text}")
+        readelf_c = shell_exec(f"readelf -S {objfile_c}")
+        readelf_asm = shell_exec(f"readelf -S {objfile_asm_text}")
 
         #get sections content
         content_c = {}
@@ -66,7 +66,7 @@ def main():
             if same_section(content_c, content_asm, section):
                 print(f"[OK] {name} {section}")
             else:
-                print(f"[--] {name} {section} : compare build/src/{name}{section}.c.bin and build/src/{name}{section}.asm.bin")
+                print(f"[--] {name} {section}")
                 if section in content_c:
                     Path(f"build/src/{name}{section}.c.bin").write_bytes(content_c[section])
                 if section in content_asm:
